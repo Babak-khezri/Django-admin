@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}Update profile{% endblock title %}
+{% block content %}
+<h1>Edit Profile</h1>
+<hr>
+<form action="" method="POST" enctype="multipart/form-data">{% csrf_token %}
+  <div class="row">
+    <!-- left column -->
+    <div class="col-md-3">
+      <div class="text-center">
+        <img width="100px" height="110px" src="{{user.image.url}}" class="avatar img-circle" alt="avatar">
+        <h6>AVATAR</h6>
+
+        {{form.image|add_class:'form-control'}}
+      </div>
+    </div>
+
+    <!-- edit form column -->
+    <div class="col-md-9 personal-info">
+      <div class="alert alert-info alert-dismissable">
+        <a class="panel-close close" data-dismiss="alert">!</a>
+        <i class="fa fa-coffee"></i>
+        This is an <strong>.alert</strong>. Use this to show important messages to the user.
+      </div>
+      <h3>Personal info</h3>
+
+
+      <div class="form-group">
+        <label class="col-lg-3 control-label">Username:</label>
+        <div class="col-lg-8">
+          {{form.username|add_class:'form-control'}}
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-lg-3 control-label">Name:</label>
+        <div class="col-lg-8">
+          {{form.name|add_class:'form-control'}}
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-lg-3 control-label">Email:</label>
+        <div class="col-lg-8">
+          {{form.email|add_class:'form-control'}}
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-lg-3 control-label">Bio:</label>
+        <div class="col-lg-8">
+          {{form.bio|add_class:'form-control'}}
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-lg-3 control-label">Website:</label>
+        <div class="col-lg-8">
+          {{form.website|add_class:'form-control'}}
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-lg-3 control-label" for="inlineFormCustomSelect">Preference</label>
+        <div class="col-lg-8">
+          {{form.gender|add_class:"custom-select mr-sm-2 w-25"}}
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-lg-3 control-label" for="inlineFormCustomSelect">Birthday</label>
+        <div class="col-lg-8">
+          {{form.birth|attr:"type:date"}}
+        </div>
+      </div>
+      <div class="form-check form-switch form-group">
+        <label class="form-check-label " for="flexSwitchCheckDefault">private : <br></label>
+        <div class="col-lg-8 px-5">
+          {{form.is_private|add_class:"form-check-input"}}
+        </div>
+      </div>
+      <div class="form-check form-switch form-group">
+        <label class="form-check-label " for="flexSwitchCheckDefault">dark mode : <br></label>
+        <div class="col-lg-8 px-5">
+          {{form.dark_mode|add_class:"form-check-input"}}
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-md-3 control-label"></label>
+        <div class="col-md-8">
+          <input type="submit" class="btn btn-primary" value="Save Changes">
+          <span></span>
+          <input type="submit" class="btn btn-default" value="Cancel">
+        </div>
+      </div>
+</form>
+</div>
+</div>
+<hr>
+{% endblock content %}

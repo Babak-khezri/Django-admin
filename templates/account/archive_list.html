@@ -1,0 +1,17 @@
+{% extends 'account/profile_base.html' %}
+{% block profile_content %}
+
+
+<div class="py-4 px-4">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h5 class="mb-0">Archive Posts</h5><a href="#" class="btn btn-link text-muted">Show all</a>
+  </div>
+  <div class="row">
+    {% for post in posts %}
+    <div class="col-lg-4 mb-2 pr-lg-0"><a href="{% url 'post:post_detail' post.pk %}">
+        <img src="{{post.image_1.url}}" class="img-fluid rounded shadow-sm"></a>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock profile_content %}

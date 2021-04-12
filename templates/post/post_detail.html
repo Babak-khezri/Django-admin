@@ -1,0 +1,273 @@
+{% extends "base.html" %}
+{% load static %}
+{% load humanize %}
+{% block title %}post detail{% endblock title %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'comment/css/comment.css' %}">
+
+
+<!------ Include the above in your HEAD tag ---------->
+
+
+
+{% if not post.is_archived or post.user == request.user%}
+
+<div class="panel-heading">
+  <div class="account-post w-75">
+    <div class="post-navbar d-flex">
+      <div class="account-detail d-flex" style="align-items: inherit;">
+        <a href="{% url 'account:profile' post.user.username %}">
+          <img src="{{post.user.image.url}}" width="70" height="70" class="rounded-circle mr-2">
+        </a>
+        <div class="search-item-content">
+          <h5 class="m-0"><a>{{post.user.username}}</a></h5>
+          <p><small>{{post.date|date:'Y-m-d H:i'}}</small></p>
+        </div>
+      </div>
+      {% if post.user == request.user %}
+      <div class="nav-item">
+        <p class="nav-link p-0" role="button" data-bs-toggle="dropdown">
+          <strong>...</strong>
+        </p>
+        <ul class="dropdown-menu mw-0" aria-labelledby="navbarDropdown">
+          {% if post.is_archived %}
+          <li><a class="dropdown-item w-100" href="{% url 'post:show_on_profile' post.pk %}">Show On Profile</a></li>
+          {% else %}
+          <li><a class="dropdown-item w-100" href="{% url 'post:archive_post' post.pk %}">Archive</a></li>
+          {% endif %}
+          <hr class="dropdown-divider">
+          <li><a class="dropdown-item" href="{% url 'post:delete_post' post.pk %}">Remove</a></li>
+        </ul>
+      </div>
+      {% endif %}
+    </div>
+    <div class="home-post pl-0 pt-1 pb-0">
+
+      {% include "post/tags/slide_show.html" %}
+
+    </div>
+  </div>
+  <div class="panel-footer pl-2">
+    <p>
+      <small style="font-size: 10px;font-family: initial;">liked by
+        <strong>
+          {% for liked_user in post.likes.all %}
+          {% if liked_user in request.user.following.all %}
+          <a style="color:black" href="{% url 'account:profile' liked_user.username %}">
+            {{liked_user.username}}
+          </a>
+          <small> & </small>
+          {% endif %}
+          {% endfor %}
+        </strong>
+      </small>
+    </p>
+    {% if request.user in post.likes.all %}
+    <a style="color:red" id="like_avatar" type="button"><i class="fa fa-heart fa-2x"></i></a>
+    {% else %}
+    <a style="color:black" id="like_avatar" type="button"><i class="fa fa-heart-o fa-2x"></i></a>
+    {% endif %}
+    {{post.likes.count}}
+    <a href="{% url 'post:post_detail' post.pk %}" style="color:black">
+      <i class="fa fa-comment-o fa-2x" aria-hidden="true"></i>
+    </a>
+    {{post.comments.count}}
+    {% if request.user in post.saves.all %}
+    <a style="color:black" id="save_avatar" type="button"><i class="fa fa fa-bookmark fa-2x"></i></a>
+    {% else %}
+    <a style="color:black" id="save_avatar" type="button"><i class="fa fa fa-bookmark-o fa-2x"></i></a>
+    {% endif %}
+    <p style="    white-space: pre-wrap;" class="p-2">{{post.text}} </p>
+  </div>
+  <div class="panel-google-plus-textarea">
+    <label for="text" class="pl-1">comment</label>
+    <form action="{% url 'comment:add_comment' post.pk %}" method="POST">{% csrf_token %}
+      <div class="row w-100">
+        <div class="col-sm-6 col-md-8">
+          <input class="form-control" type="text" name="text" rows="5" placeholder="What are you thinking?">
+        </div>
+        <div class="col-6 col-md-4">
+          <button class="btn btn-sm btn-primary" type="submit"><i class="fa fa-pencil fa-fw"></i>Share</button>
+        </div>
+      </div>
+    </form>
+    <hr>
+    <div class="panel">
+      <div class="panel-body">
+        <!-- Newsfeed Content -->
+        {% for comment in post.comments.all %}
+
+        {% if comment.parent == None %}
+        <div class="media-block">
+          <a class="media-left" href="#"><img class="img-sm rounded-circle mr-1" alt="Profile Picture"
+              src="{{comment.user.image.url}}"></a>
+          <div class="media-body">
+            <div class="mar-btm">
+              <a href="{% url 'account:profile' comment.user.username %}">{{comment.user.username}}</a>
+              <p class="text-muted text-sm">{{comment.date|naturaltime}}</p>
+            </div>
+            <div class="text-like d-flex justify-content-between w-50">
+              <p>{{comment.text}}</p>
+              <div class="btn-group d-flex align-items-baseline">
+                {% if request.user in comment.likes.all %}
+                <a class="btn btn-sm text-success  disable"><i class="fa fa-thumbs-up"></i></a>
+                {% else %}
+                <a class="btn btn-sm btn-default" href="{% url 'comment:like_comment' comment.pk %}">
+                  <i class="fa fa-thumbs-up"></i></a>
+                {% endif %}
+                <small>{{comment.likes.count}}</small>
+                {% if request.user in comment.dislikes.all %}
+                <a class="btn btn-sm text-danger disable"><i class="fa fa-thumbs-down"></i></a>
+                {% else %}
+                <a class="btn btn-sm btn-default" href="{% url 'comment:dislike_comment' comment.pk %}">
+                  <i class="fa fa-thumbs-down"></i></a>
+                {% endif %}
+                <small>{{comment.dislikes.count}}</small>
+              </div>
+            </div>
+            <form action="{% url 'comment:replay_comment' post.pk comment.pk  %}" method="POST">{% csrf_token %}
+              <div class="d-flex w-50">
+                <input class="form-control" name="text" id="replay_input" required type="text" placeholder="....">
+                <button class="btn btn-sm btn-primary" type="submit">
+                  <i class="fa fa-pencil fa-fw"></i>replay</button>
+              </div>
+            </form>
+            {% if comment.replays.count != 0 %}
+            <a class="btn text-primary color-blue mt-2" id='show_replay_btn' type="button">show replays...</a>
+            {% endif %}
+            <hr class="m-2">
+            {% if comment.replays.count != 0 %}
+            <div class="d-none">
+              {% include "post/tags/replay_loop.html" %}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+        <!--===================================================-->
+        <!-- End Newsfeed Content -->
+      </div>
+    </div>
+  </div>
+</div>
+{% block javascript %}
+<script>
+  let replaysButton = document.querySelectorAll('#replay_btn');
+  replaysButton.forEach(replayBtn => {
+    replayBtn.addEventListener('click', e => {
+      let target = e.target.parentElement.parentElement;
+      let username = target.querySelector("#username").textContent;
+      let inputArea = target.parentElement.parentElement.querySelector("#replay_input");
+      inputArea.parentElement.scrollIntoView({
+        top: 0,
+        behavior: "smooth"
+      })
+      inputArea.value = `@${username} `
+
+    });
+  });
+</script>
+<!-- show hide replays -->
+<script>
+  let showBottoms = document.querySelectorAll("#show_replay_btn")
+  showBottoms.forEach(showBtn => {
+    showBtn.addEventListener("click", e => {
+      let replayDiv = e.target.nextSibling.nextSibling.nextSibling.nextSibling
+      if (e.target.textContent.includes("show")) {
+        e.target.textContent = 'hide replays...'
+      } else {
+        e.target.textContent = 'show replays...'
+      }
+      replayDiv.classList.toggle('d-none')
+    })
+  })
+</script>
+
+<script>
+  let posts = document.querySelectorAll(".home-post");
+  let like_avatar = document.querySelector("#like_avatar");
+  let save_avatar = document.querySelector("#save_avatar");
+  // double click like post
+  posts.forEach(post => {
+    post.addEventListener("dblclick", e => {
+      like_avatar.click();
+    })
+  })
+  // ajax like post
+  like_avatar.addEventListener("click", e => {
+    e.preventDefault();
+    if (like_avatar.style.color == 'red') {
+      let url_mask = "{% url 'post:unlike_post' request.user.username post.pk %}";
+      fetch(url_mask, {
+        method: "Post",
+        headers: {
+          "x-CSRFToken": getCSRFToken(),
+          "X-Requested-With": "XMLHttpRequest",
+        }
+      }).then(function (response) {
+        like_avatar.style.color = 'black';
+        like_avatar.nextSibling.textContent = parseInt(like_avatar.nextSibling.textContent) - 1;
+        like_avatar.firstChild.className = "fa fa-heart-o fa-2x";
+        return response.json();
+      })
+    } else {
+      let url_mask = "{% url 'post:like_post' request.user.username post.pk %}";
+      fetch(url_mask, {
+        method: "Post",
+        headers: {
+          "x-CSRFToken": getCSRFToken(),
+          "X-Requested-With": "XMLHttpRequest",
+        }
+      }).then(function (response) {
+        like_avatar.style.color = 'red';
+        like_avatar.nextSibling.textContent = parseInt(like_avatar.nextSibling.textContent) + 1;
+        like_avatar.firstChild.className = "fa fa-heart fa-2x";
+        return response.json();
+      })
+    }
+  })
+  // ajax save post
+  save_avatar.addEventListener("click", e => {
+    e.preventDefault();
+    let url_mask;
+    if (save_avatar.firstChild.classList.contains("fa-bookmark-o")) {
+      url_mask = "{% url 'post:save_post' request.user.username post.pk %}";
+      save_avatar.firstChild.className = 'fa fa-bookmark fa-2x';
+    } else {
+      url_mask = "{% url 'post:unsave_post' request.user.username post.pk %}";
+      save_avatar.firstChild.className = 'fa fa-bookmark-o fa-2x';
+    }
+    fetch(url_mask, {
+      method: "Post",
+      headers: {
+        "x-CSRFToken": getCSRFToken(),
+        "X-Requested-With": "XMLHttpRequest",
+      }
+    }).then(function (response) {
+      return response.json();
+    })
+  })
+
+  // get csrfToken
+  function getCSRFToken() {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = jQuery.trim(cookies[i]);
+        if (cookie.substring(0, 10) == ('csrftoken' + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(10));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+</script>
+
+{% endblock javascript %}
+{% endif %}
+
+{% endblock content %}

@@ -1,0 +1,72 @@
+.container-fluid {
+    background: #5a5a5a;
+}
+
+.container {
+    background: black;
+    color: white;
+}
+
+nav.navbar.navbar-expand-lg.navbar-light {
+    background: linear-gradient(45deg, #dc0000, #004aa9) !important;
+    border: double #9fa2e4 !important;
+    box-shadow: 2px -7px 20px 0px rgb(196, 196, 196) !important;
+    border-top: 0 !important;
+}
+
+.bg-white.shadow.rounded.overflow-hidden {
+    background: #312a2a !important;
+}
+
+.rounded.shadow-sm.bg-light {
+    background: #3a3939 !important;
+}
+
+.bg-light.p-4.d-flex.justify-content-end.text-center {
+    background: #403f3f !important;
+}
+
+a {
+    color: white !important;
+}
+
+.text-muted {
+    color: #75b9f5 !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: white !important
+}
+
+.small.mb-4 {
+    color: gainsboro !important;
+}
+
+a.btn.btn-outline-dark.btn-sm.btn-block {
+    border-color: #ababab !important;
+}
+
+figure.gallery__item {
+    box-shadow: 3px 5px 12px 3px rgb(196 196 196) !important;
+}
+
+.inbox_people {
+    background: #000000 none repeat scroll 0 0 !important;
+}
+
+.input_msg_write input {
+    color: #f7f7f7 !important;
+}
+
+ul.dropdown-menu {
+    background: #2f2f2f !important;
+}
+
+.file-upload {
+    background-color: #000000 !important;
+}

@@ -1,0 +1,34 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slide Stories: Instagram Like Slideshow Example</title>
+  <link rel="stylesheet" href="{% static 'story/css/slide-stories.css' %}">
+</head>
+
+<body>
+  <div class="account">
+    <img src="{{stories.0.user.image.url}}" width="65px" height="65px" alt="">
+    <h2>{{stories.0.user.username}}</h2>
+  </div>
+  <div data-slide="slide" class="slide">
+    <div class="slide-items">
+      {% for story in stories %}
+
+      <img src="{{story.image.url}}" alt="Img 1">
+      {% endfor %}
+
+    </div>
+    <nav class="slide-nav">
+      <div class="slide-thumb"></div>
+      <button class="slide-prev">Prev</button>
+      <button class="slide-next">Next</button>
+    </nav>
+  </div>
+
+  <script src="{% static 'story/js/slide-stories.js' %}"></script>
+</body>
+</html>

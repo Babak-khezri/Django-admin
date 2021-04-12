@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock title %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'instagram/css/account.css' %}">
+
+
+<div class="search-item-img d-flex">
+  {% for account in accounts %}
+  {% if request.user in account.stories.last.hits.all %}
+  <div class="story-image">
+    {% else %}
+    <div class="story-image" style="order: -1;">
+      {% endif %}
+      <div class="image_outer_container d-flex">
+        <div class="green_icon"></div>
+        {% if request.user in account.stories.last.hits.all %}
+        <div class="image_inner_container" style="background: darkgray;">
+          {% else %}
+          <div class="image_inner_container">
+            {% endif %}
+            <a target="_blank" href="{% url 'story:story_list' account.username %}">
+              <img src="{{account.image.url}}">
+            </a>
+            <a href="{% url 'account:profile' account.username %}">
+              <p class="text-center">{{account.username}}</p>
+            </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <hr>
+    <div class="content d-flex flex-row-reverse align-items-normal">
+      <div class="suggestions w-25">
+
+        <h4>suggestions for you</h4>
+        <hr>
+        {% for account in suggestions %}
+        <div class="suggest justify-content-between align-items-center p-1 d-flex">
+          <img height="50px" class="rounded-circle" width="50px" src="{{account.image.url}}" alt="">
+          <small class="ml-3 flex-grow-1">
+            {{account.username|truncatechars:15}}
+          </small>
+          <a href="{% url 'account:profile' account.username %}" class="btn btn-primary mt-2">
+            follow
+          </a>
+        </div>
+        {% endfor %}
+
+      </div>
+      <div class="posts w-75">
+        <div class="row">
+          {% for post in posts %}
+          <div class="d-flex flex-column">
+            <div class="search-item pl-3 d-inline-flex">
+              <div class="search-item-img mr-1">
+                <a href="{% url 'account:profile' post.user.username %}">
+                  <img src="{{post.user.image.url}}" width="70" height="70">
+                </a>
+              </div>
+              <div class="search-item-content">
+                <h5 class="search-item-caption"><a
+                    href="{% url 'account:profile' post.user.username %}">{{post.user.username}}</a></h5>
+                <div class="search-item-meta mb-15">
+                  <ul class="list-inline">
+                    <li class=""><small>{{post.date|date:'Y-m-d H:i'}}</small></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="p-2">
+              <div class="d-flex flex-row">
+                <div class="p-2 home-post">
+                  {% include "post/tags/slide_show.html" %}
+                </div>
+                <div class="p-2 post-detail">
+                  <div class="detail">
+                    {{post.text|truncatewords:55}}
+                    <div class="like-comment" id="{{post.pk}}">
+                      <hr>
+                      <p><small style="font-size: 10px;font-family: initial;">liked by <strong>
+                            {% for liked_user in post.likes.all %}
+                            {% if liked_user in request.user.following.all %}
+                            <a style="color:black" href="{% url 'account:profile' liked_user.username %}">
+                              {{liked_user.username}}
+                            </a><small> & </small>
+                            {% endif %}
+                            {% endfor %}
+                          </strong></small>
+                      </p>
+                      {% if request.user in post.likes.all %}
+                      <a style="color:red" id="like_avatar" type="button"><i class="fa fa-heart fa-2x"></i></a>
+                      {% else %}
+                      <a style="color:black" id="like_avatar" type="button"><i class="fa fa-heart-o fa-2x"></i></a>
+                      {% endif %}
+                      {{post.likes.count}}
+                      <a href="{% url 'post:post_detail' post.pk %}" style="color:black">
+                        <i class="fa fa-comment-o fa-2x" aria-hidden="true"></i>
+                      </a>
+                      {{post.comments.count}}
+                      {% if request.user in post.saves.all %}
+                      <a style="color:black" id="save_avatar" type="button"><i class="fa fa fa-bookmark fa-2x"></i></a>
+                      {% else %}
+                      <a style="color:black" id="save_avatar" type="button"><i
+                          class="fa fa fa-bookmark-o fa-2x"></i></a>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% endblock content %}
+
+    {% block javascript %}
+    <script>
+      // double click like post
+      let posts = document.querySelectorAll(".home-post");
+      posts.forEach(post => {
+        post.addEventListener("dblclick", e => {
+          let target = e.target.parentElement.parentElement.parentElement.parentElement.parentElement;
+          like_avatar = target.querySelector("#like_avatar");
+          like_avatar.firstChild.click();
+        })
+      })
+      // ajax like post
+      let like_avatars = document.querySelectorAll("#like_avatar");
+      like_avatars.forEach(like => {
+        like.addEventListener("click", e => {
+          e.preventDefault();
+          let post_pk = e.target.parentElement.parentElement.id;
+          if (e.target.parentElement.style.color == 'red') {
+            let url_mask = "{% url 'post:unlike_post' request.user.username -1 %}".replace("-1", post_pk);
+            fetch(url_mask, {
+              method: "Post",
+              headers: {
+                "x-CSRFToken": getCSRFToken(),
+                "X-Requested-With": "XMLHttpRequest",
+              }
+            }).then(function (response) {
+              let heart = e.target.parentElement;
+              heart.style.color = 'black';
+              heart.nextSibling.textContent = parseInt(heart.nextSibling.textContent) - 1;
+              heart.firstChild.className = "fa fa-heart-o fa-2x";
+              return response.json();
+            })
+          } else {
+            let url_mask = "{% url 'post:like_post' request.user.username -1 %}".replace("-1", post_pk);
+            fetch(url_mask, {
+              method: "Post",
+              headers: {
+                "x-CSRFToken": getCSRFToken(),
+                "X-Requested-With": "XMLHttpRequest",
+              }
+            }).then(function (response) {
+              let heart = e.target.parentElement;
+              heart.style.color = 'red';
+              heart.nextSibling.textContent = parseInt(heart.nextSibling.textContent) + 1;
+              heart.firstChild.className = "fa fa-heart fa-2x";
+              return response.json();
+            })
+          }
+        })
+      })
+      // ajax save post
+      let save_avatars = document.querySelectorAll("#save_avatar");
+      save_avatars.forEach(save => {
+        save.addEventListener("click", e => {
+          e.preventDefault();
+          let post_pk = e.target.parentElement.parentElement.id;
+          let url_mask;
+          if (e.target.classList.contains("fa-bookmark-o")) {
+            url_mask = "{% url 'post:save_post' request.user.username -1 %}".replace("-1", post_pk);
+            e.target.className = 'fa fa-bookmark fa-2x';
+          } else {
+            url_mask = "{% url 'post:unsave_post' request.user.username -1 %}".replace("-1", post_pk);
+            e.target.className = 'fa fa-bookmark-o fa-2x';
+          }
+          fetch(url_mask, {
+            method: "Post",
+            headers: {
+              "x-CSRFToken": getCSRFToken(),
+              "X-Requested-With": "XMLHttpRequest",
+            }
+          }).then(function (response) {
+            
+            return response.json();
+          })
+        })
+      })
+
+      // get csrfToken
+      function getCSRFToken() {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            if (cookie.substring(0, 10) == ('csrftoken' + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(10));
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+    </script>
+
+    {% endblock javascript %}

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block title %} new post{% endblock title %}
+
+{% block content %}
+<h1>New post</h1>
+<hr>
+<form action="" method="POST" enctype="multipart/form-data">{% csrf_token %}
+  <div class="row">
+    <!-- left column -->
+    <div class="col-md-3">
+      
+    </div>
+
+    <!-- edit form column -->
+    <div class="col-md-5 personal-info">
+      <div class="alert alert-info alert-dismissable">
+        <a class="panel-close close" data-dismiss="alert">*</a>
+        <i class="fa fa-coffee"></i>
+        New post share with friends
+      </div>
+      <h3>New post * </h3>
+      <hr>
+
+      <div class="form-group">
+        <div class="text-center">
+          
+          <h6>File/Image/Video</h6>
+  
+          {{form.image_1|add_class:'form-control'}}
+          {{form.image_2|add_class:'form-control'}}
+          {{form.image_3|add_class:'form-control'}}
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-lg-3 control-label">Text:</label>
+        <div class="col-lg-8">
+          {{form.text|add_class:'form-control'}}
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="col-md-3 control-label"></label>
+        <div class="col-md-8">
+          <input type="submit" class="btn btn-primary" value="Share post">
+          <span></span>
+          <a class="btn btn-danger"href="{% url 'account:profile' request.user.username %}">Cancel</a>
+        </div>
+      </div>
+</form>
+</div>
+</div>
+<hr>
+{% endblock content %}
+<form action="" method="POST" enctype="multipart/form-data">{% csrf_token %}
+  {{form.as_p}}
+  <input type="submit">
+</form>

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<div class="account-list d-flex flex-column align-items-center">
+  <div class="navbar">
+    <h3>accounts:</h3>
+  </div>
+  <hr>
+  <div class="accounts">
+    {% for account in accounts %}
+    <div class="account d-flex align-items-center mb-3">
+      <div class="search-item-img mr-4">
+        <a href="{% url 'account:profile' account.username %}">
+          <img src="{{account.image.url}}" width="70" height="70">
+        </a>
+      </div>
+      <div class="search-item-meta mb-15">
+        <h5 class="search-item-caption">{{account.username}}</h5>
+        {{account.name}}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock content %}

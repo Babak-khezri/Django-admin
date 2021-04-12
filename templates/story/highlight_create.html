@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}new highlight{% endblock title %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'story/css/highlight.css' %}" type="text/css">
+
+
+<form action="" method="POST" enctype="multipart/form-data">{% csrf_token %}
+    <input type="text" name="name" required>
+    <input type="file" name="image" accept="image/*" id="id_image">
+    <div class="py-4 px-4">
+
+        {% for story in stories %}
+        <ul>
+            <li>
+                <input type="checkbox" name="stories" value="{{story.pk}}" id="myCheckbox{{story.pk}}" />
+                <label for="myCheckbox{{story.pk}}"><img src="{{story.image.url}}" /></label>
+            </li>
+        </ul>
+        {% endfor %}
+    </div>
+    <input type="submit">
+</form>
+{% endblock content %}

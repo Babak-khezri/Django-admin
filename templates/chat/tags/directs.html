@@ -1,0 +1,25 @@
+{% for account,message in a %}
+{% if account.username == user2 %}
+
+<div class="chat_list active_chat">
+  {% else %}
+  <div class="chat_list">
+    {% endif %}
+    <div class="chat_people">
+      <a href="{% url 'chat:direct' account.username %}">
+        <div class="chat_img">
+          <img height="45px" class="rounded-circle z-depth-2" src="{{account.image.url}}" alt="sunil"> </div>
+        <div class="chat_ib">
+          <h5>{{account.username}} <span class="chat_date">{{message.date|date:'Y-m-d H:i'}}</span></h5>
+          {% if message.seen or message.sender == user %}
+          <p>{{message.text}}</p>
+          {% else %}
+          <p style="color: rgb(6, 0, 90);">{{message.text}}</p>
+          {% endif %}
+
+        </div>
+      </a>
+    </div>
+  </div>
+  {% endfor %}
+</div>

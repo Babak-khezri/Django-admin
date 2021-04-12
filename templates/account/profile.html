@@ -1,0 +1,43 @@
+{% extends 'account/profile_base.html' %}
+{% load static %}
+{% block profile_content %}
+
+<div class="py-1 px-4">
+  <div class="d-flex align-items-center">
+    {% if request.user == user or not user.is_private or request.user in user.followers.all%}
+    {% for highlight in user.highlights.all %}
+    <div class="highlight ml-2 mr-2">
+      <a href="{% url 'story:highlight_story' highlight.pk %}" target="_blank">
+      <img width="85px" height="85px" src="{{highlight.image.url}}" class="rounded-circle highlight-img"></a>
+      <p class="text-center">{{highlight.name}}</p>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% if user == request.user %}
+    <div class="highlight ml-2 mr-2">
+      <a href="{% url 'story:highlite_create' %}">
+        <img width="85px" height="85px" src="{% static 'story/img/plus.png' %}" class="rounded-circle">
+      </a>
+      <p class="text-center"><small>new highlight</small></p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+<div class="py-2 px-4">
+  <div class="d-flex align-items-center justify-content-between mb-3">
+    <h5 class="mb-0">Recent Posts</h5><a href="#" class="btn btn-link text-muted">Show all</a>
+  </div>
+  <div class="row">
+    {% if request.user == user or not user.is_private or request.user in user.followers.all%}
+    {% for post in posts %}
+
+    <div class="col-lg-4 mb-2 pr-lg-0"><a href="{% url 'post:post_detail' post.pk %}">
+        <img src="{{post.image_1.url}}" class="img-fluid rounded shadow-sm"></a>
+    </div>
+    {% endfor %}
+    {% else %}
+    <h2 class="text-center">this page is private</h2>
+    {% endif %}
+  </div>
+</div>
+{% endblock profile_content %}

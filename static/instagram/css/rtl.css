@@ -1,0 +1,47 @@
+.p-2.home-post img {
+  border: double;
+}
+
+.detail {
+  border: double;
+  height: 100%;
+  width: 246px;
+  word-wrap: break-word;
+  padding: 11px;
+  border-left: none;
+  position: relative;
+}
+
+.p-2.home-post {
+  padding: .5rem 0 .5rem .5rem !important;
+}
+
+.p-2.post-detail {
+  padding: .5rem .5rem .5rem 0 !important;
+}
+
+.like-comment {
+  position: absolute;
+  bottom: 0;
+}
+
+.suggestions {
+  float: right;
+  border-top: ridge;
+  border-bottom: ridge;
+  border-left: ridge;
+  padding: 10px;
+  margin-top: 86px;
+}
+
+nav.navbar.navbar-expand-lg.navbar-light {
+  background: linear-gradient(45deg, #d46b6b, #acfeff);
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  border: double #9fa2e4;
+  border-top: 0;
+  border-style: inset;
+  box-shadow: 2px -7px 20px 0px black;
+  padding: 15px;
+    margin-bottom: 15px;
+}

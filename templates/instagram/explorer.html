@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load extra_filters %}
+{% block title %}explorer{% endblock title %}
+{% block content %}
+<div class="gallery p-5">
+  {% for post in posts %}
+
+  <figure class="gallery__item gallery__item--{%reminder forloop.counter%}" id={{forloop.counter}}>
+    <a href="{% url 'post:post_detail' post.pk %}">
+      <img src="{{ post.image_1.url}}" alt="Gallery image 1" class="gallery__img">
+    </a>
+  </figure>
+  
+  {% endfor %}
+</div>
+
+{% endblock content %}
+
+{% block javascript %}
+<script>
+  let posts = document.querySelectorAll(".gallery__item");
+  posts.forEach(element => {
+    if (element.id == 0) {}
+  })
+</script>
+
+{% endblock javascript %}
