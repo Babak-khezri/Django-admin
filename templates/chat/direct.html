@@ -1,18 +1,19 @@
 {% extends "chat/direct_list.html" %}
 {% block direct_content %}
+{% load widget_tweaks %}
 <div class="mesgs">
 
   <div class="headind_srch">
     <div class="recent_heading">
       <div class="incoming_msg_img">
-        <img height="35px"  width="35px" style="max-width:none" class="rounded-circle" src="{{user2.image.url}}" alt="sunil">
+        <img height="35px" width="35px" style="max-width:none" class="rounded-circle" src="{{user2.image.url}}"
+          alt="sunil">
       </div>
-
     </div>
     <div class="srch_bar">
       <div class="stylish-input-group">
         <span class="input-group-addon">
-          <button type="button" border> ! </button>
+          <button type="button"> ! </button>
         </span>
       </div>
     </div>
@@ -23,7 +24,13 @@
     {% if message.sender == request.user  %}
     <div class="outgoing_msg">
       <div class="sent_msg">
+
+        {% if message.file %}
+        <img src="{{message.file.file.url}}" alt="">
+        {% else %}
         <p>{{message.text}}</p>
+        {% endif %}
+
         <span class="time_date">
           {% if message.seen %}
           &#x2714;
@@ -32,11 +39,12 @@
           {% endif %}
           {{message.date|date:'Y-m-d H:i'}}
           <div class="nav-item float-right">
-            <a class="nav-link p-0" href="#" role="button" data-bs-toggle="dropdown">
+            <a class="nav-link p-0 mr-1" href="#" role="button" data-bs-toggle="dropdown">
               <strong>...</strong>
             </a>
-            <ul class="dropdown-menu mw-0" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="{% url 'chat:delete_message' message.pk %}"><small>delete</small> </a></li>
+            <ul class="dropdown-menu mw-0 p-0" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="{% url 'chat:delete_message' message.pk %}"><small>delete</small> </a>
+              </li>
               <!-- <li><a class="dropdown-item" href="">Remove</a></li> -->
             </ul>
           </div>
@@ -51,7 +59,11 @@
       </div>
       <div class="received_msg">
         <div class="received_withd_msg">
+          {% if message.file %}
+          <img src="{{message.file.file.url}}" alt="">
+          {% else %}
           <p>{{message.text}}</p>
+          {% endif %}
           <span class="time_date"> {{message.date|date:'Y-m-d H:i' }} </span>
         </div>
       </div>
@@ -62,12 +74,142 @@
   </div>
   <div class="type_msg">
     <div class="input_msg_write">
-      <form action="{% url 'chat:send_message' user2.username %}" method="POST">{% csrf_token %}
-        <input required type="text" class="write_msg" name="message" placeholder="Type a message" />
-        <button class="msg_send_btn" type="submit"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
-      </form>
+      <div class="msg-form">{% csrf_token %}
+        <input type="text" autocomplete="off" class="write_msg" id="msg" placeholder="Type a message" />
+        <form action="" id="formData" enctype="multipart/form-data">
+          {{form.file|attr:"onchange:createFileMessage()"|attr:"hidden"}}
+        </form>
+        <button class="attach_btn"><i class="fa fa- fa-paperclip" aria-hidden="true"></i></button>
+        <button class="msg_send_btn" type="button" onclick="sendMessage()"><i class="fa fa-paper-plane-o"
+            aria-hidden="true"></i></button>
+      </div>
     </div>
   </div>
 </div>
-
 {% endblock direct_content %}
+
+{% block javascript %}
+<script>
+  let attach_btn = document.querySelector(".attach_btn");
+  let fileInput = document.querySelector("#id_file");
+  let fileForm = document.querySelector('#formData');
+  let direct = document.querySelector('.msg_history');
+  attach_btn.addEventListener("click", () => {
+    fileInput.click()
+  })
+
+  function sendMessage() {
+    let message = document.querySelector("#msg");
+    let data = JSON.stringify({
+      'msg': message.value,
+    })
+    if (message.value != "") {
+      fetch("{% url 'chat:send_message' user2.username %}", {
+        method: "Post",
+        body: data,
+        headers: {
+          "x-CSRFToken": getCSRFToken(),
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      }).then(function (response) {
+        return response.json();
+      }).then(function (response) {
+        let instance = JSON.parse(response['msg']);
+        let fields = instance[0]['fields'];
+        let date = fields['date'].split('T');
+        date = date[0] + ' ' + date[1].slice(0, 5);
+        let delete_url = "{% url 'chat:delete_message' 1 %}".replace("1", instance['0']['pk']);
+        console.log(delete_url)
+        direct.innerHTML += `
+        <div class="outgoing_msg">
+          <div class="sent_msg">
+            <p>${fields['text']}</p>
+            <span class="time_date">
+              &#x2713;
+              ${date}
+              <div class="nav-item float-right">
+                <a class="nav-link p-0" href="#" role="button" data-bs-toggle="dropdown">
+                  <strong>...</strong>
+                </a>
+                <ul class="dropdown-menu mw-0" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="${delete_url}"><small>delete</small> </a>
+                  </li>
+                </ul>
+              </div>
+            </span>
+          </div>
+        </div>
+        `
+        message.value = '';
+      })
+    }
+  }
+
+  function getCSRFToken() {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = jQuery.trim(cookies[i]);
+        if (cookie.substring(0, 10) == ('csrftoken' + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(10));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  function createFileMessage() {
+    let formData = new FormData(fileForm);
+    fetch("{% url 'chat:file_message' user2.username %}", {
+      method: "Post",
+      body: formData,
+      headers: {
+        "x-CSRFToken": getCSRFToken(),
+        "X-Requested-With": "XMLHttpRequest",
+      },
+    }).then(function (response) {
+      return response.json();
+    }).then(function (response) {
+      let instance = JSON.parse(response['msg']);
+      let fields = instance[0]['fields'];
+      let date = fields['date'].split('T');
+      date = date[0] + ' ' + date[1].slice(0, 5);
+      let delete_url = "{% url 'chat:delete_message' 1 %}".replace("1", instance['0']['pk']);
+      direct.innerHTML += `
+        <div class="outgoing_msg">
+          <div class="sent_msg">
+            <img src="${response['file']}"></img>
+            <span class="time_date">
+              &#x2713;
+              ${date}
+              <div class="nav-item float-right">
+                <a class="nav-link p-0" href="#" role="button" data-bs-toggle="dropdown">
+                  <strong>...</strong>
+                </a>
+                <ul class="dropdown-menu mw-0" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="${delete_url}"><small>delete</small> </a>
+                  </li>
+                </ul>
+              </div>
+            </span>
+          </div>
+        </div>
+        `
+      message.value = '';
+    })
+
+  }
+
+
+
+  msgInput = document.querySelector("#msg")
+  msgInput.addEventListener('keyup', function (event) {
+    event.preventDefault();
+    if (event.keyCode === 13) {
+      sendMessage()
+    }
+  })
+</script>
+{% endblock javascript %}

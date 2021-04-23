@@ -16,9 +16,7 @@ def direct_list(username):
     last_messages = []
     for account in accounts:
         direct_messages = list(Message.objects.filter((Q(sender=account) & Q(getter=user) | Q(sender=user) & Q(getter=account))).order_by('date'))
-        print(direct_messages)
         last_messages.append(direct_messages[-1])
-    print(last_messages)
     last_messages.sort(key=lambda x: x.date,reverse=True)
     accounts = []
     for last_message in last_messages:

@@ -13,6 +13,8 @@ AUTH_USER_MODEL = 'account.User'
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'b2em2nsqqn@l$54o*yt^y(y2-osk(uo)45zcg*)hh!4q_90!+n'
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -112,7 +114,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
