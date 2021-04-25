@@ -30,19 +30,21 @@
 .detail {
   border: double;
   height: 100%;
-  width: 246px;
   word-wrap: break-word;
   padding: 11px;
   border-left: none;
   position: relative;
+  font-size: 14px;
 }
 
 .p-2.home-post {
   padding: .5rem 0 .5rem .5rem !important;
+  width: 70%;
 }
 
 .p-2.post-detail {
   padding: .5rem .5rem .5rem 0 !important;
+  width: 30%;
 }
 
 .like-comment {
@@ -53,7 +55,7 @@
 
 .suggestions {
   padding: 10px;
-  margin-top: 23px;
+  margin-top: 6px;
   text-align: center;
   padding-right: 0;
 }
@@ -70,11 +72,19 @@ nav.navbar.navbar-expand-lg.navbar-light {
   margin-bottom: 15px;
 }
 
-.story_list {
-  min-height: 113px;
-}
-
 
 ul.navbar-nav.flex-row.align-items-center img {
   border: solid white;
+}
+
+.story-list.d-flex {
+  min-height: 109px;
+}
+
+.search-item-content a {
+  font-size: 17px;
+}
+
+.search-item-content {
+  font-size: 14px;
 }

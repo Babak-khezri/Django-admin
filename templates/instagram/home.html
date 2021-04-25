@@ -25,7 +25,6 @@
 </div>
 
 <hr class="mt-0">
-
 <div class="content d-flex flex-row-reverse align-items-normal">
   <div class="suggestions w-25">
     <h4>suggestions for you</h4>
@@ -50,10 +49,10 @@
         <div class="search-item pl-3 d-inline-flex">
           <div class="search-item-img mr-1">
             <a href="{% url 'account:profile' post.user.username %}">
-              <img src="{{post.user.image.url}}" class="rounded-circle" width="60" height="60">
+              <img src="{{post.user.image.url}}" class="rounded-circle" width="50px" height="50px">
             </a>
           </div>
-          <div class="search-item-content mt-2">
+          <div class="search-item-content mt-1">
             <h5 class="search-item-caption m-0"><a
                 href="{% url 'account:profile' post.user.username %}">{{post.user.username}}</a></h5>
             <div class="search-item-meta mb-15">
