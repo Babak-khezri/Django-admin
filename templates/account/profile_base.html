@@ -72,9 +72,9 @@
             </div>
         </div>
         <div class="px-4 py-1">
-            <h5 class="mb-0">BIO :</h5>
-            <div class="rounded shadow-sm bg-light">
-                {{user.bio}}
+            <h5 class="mb-1">BIO :</h5>
+            <div class="rounded shadow-sm bg-light py-2">
+                {{user.bio|linebreaksbr }}
             </div>
         </div>
         {% block profile_content %}

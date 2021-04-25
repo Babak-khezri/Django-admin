@@ -8,12 +8,12 @@
     {% for highlight in user.highlights.all %}
     <div class="highlight ml-2 mr-2">
       <a href="{% url 'story:highlight_story' highlight.pk %}" target="_blank">
-      <img width="85px" height="85px" src="{{highlight.image.url}}" class="rounded-circle highlight-img"></a>
+        <img width="85px" height="85px" src="{{highlight.image.url}}" class="rounded-circle highlight-img"></a>
       <p class="text-center">{{highlight.name}}</p>
     </div>
     {% endfor %}
     {% endif %}
-    {% if user == request.user %}
+    {% if user == request.user and user.stories.count %}
     <div class="highlight ml-2 mr-2">
       <a href="{% url 'story:highlite_create' %}">
         <img width="85px" height="85px" src="{% static 'story/img/plus.png' %}" class="rounded-circle">
