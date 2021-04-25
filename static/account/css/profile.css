@@ -8,3 +8,18 @@
     width: 70% !important;
   }
 }
+
+.pro-post.d-flex {
+  flex-wrap: wrap-reverse;
+  justify-content: space-between;
+}
+
+.post {
+  width: 32%;
+  margin-bottom: 5px;
+}
+
+.post-image {
+  height: 20vh;
+  width: 100%;
+}

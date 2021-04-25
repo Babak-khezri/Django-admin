@@ -24,17 +24,24 @@
 }
 
 .p-2.home-post img {
-  border: double;
+  border: groove;
+  border-bottom-left-radius: 7px;
+  border-top-left-radius: 7px;
+
 }
 
+
 .detail {
-  border: double;
+  border: groove;
   height: 100%;
   word-wrap: break-word;
   padding: 11px;
   border-left: none;
   position: relative;
   font-size: 14px;
+  border-bottom-right-radius: 7px;
+  border-top-right-radius: 7px;
+
 }
 
 .p-2.home-post {
@@ -51,6 +58,7 @@
   position: absolute;
   bottom: 0;
   width: 90%;
+  margin-bottom: 1px;
 }
 
 .suggestions {
