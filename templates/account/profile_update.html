@@ -99,8 +99,6 @@
 
 <script>
   pro_img = document.querySelector('#profile-img')
-  pro_img.textContent.replace('در حال حاضر', '')
-
   pro_img.childNodes.forEach(child => {
     if (child.type != 'file')
       child.hidden = true

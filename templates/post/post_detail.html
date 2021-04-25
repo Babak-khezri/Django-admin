@@ -22,15 +22,15 @@
         </a>
         <div class="search-item-content">
           <h5 class="m-0"><a>{{post.user.username}}</a></h5>
-          <p><small>{{post.date|date:'Y-m-d H:i'}}</small></p>
+          <p class="m-0"><small>{{post.date|date:'Y-m-d H:i'}}</small></p>
         </div>
       </div>
       {% if post.user == request.user %}
-      <div class="nav-item">
-        <p class="nav-link p-0" role="button" data-bs-toggle="dropdown">
+      <div class="nav-item dropdown">
+        <p class="nav-link p-0 m-0" role="button" data-bs-toggle="dropdown">
           <strong>...</strong>
         </p>
-        <ul class="dropdown-menu mw-0" aria-labelledby="navbarDropdown">
+        <ul class="dropdown-menu mw-0" data-toggle="dropdown" aria-labelledby="navbarDropdown">
           {% if post.is_archived %}
           <li><a class="dropdown-item w-100" href="{% url 'post:show_on_profile' post.pk %}">Show On Profile</a></li>
           {% else %}
@@ -64,22 +64,23 @@
       </small>
     </p>
     {% if request.user in post.likes.all %}
-    <a style="color:red" id="like_avatar" type="button"><i class="fa fa-heart fa-2x"></i></a>
+    <a style="color:red" id="like_avatar" type="button"><i class="fas fa-heart fa-2x"></i></a>
     {% else %}
-    <a style="color:black" id="like_avatar" type="button"><i class="fa fa-heart-o fa-2x"></i></a>
+    <a style="color:black" id="like_avatar" type="button"><i class="far fa-heart fa-2x"></i></a>
     {% endif %}
     {{post.likes.count}}
     <a href="{% url 'post:post_detail' post.pk %}" style="color:black">
-      <i class="fa fa-comment-o fa-2x" aria-hidden="true"></i>
+      <i class="fas fa-comments fa-2x" aria-hidden="true"></i>
     </a>
     {{post.comments.count}}
     {% if request.user in post.saves.all %}
-    <a style="color:black" id="save_avatar" type="button"><i class="fa fa fa-bookmark fa-2x"></i></a>
+    <a style="color:black" id="save_avatar" type="button"><i class="fas fa fa-bookmark fa-2x"></i></a>
     {% else %}
-    <a style="color:black" id="save_avatar" type="button"><i class="fa fa fa-bookmark-o fa-2x"></i></a>
+    <a style="color:black" id="save_avatar" type="button"><i class="far fa fa-bookmark fa-2x"></i></a>
     {% endif %}
     <p style="    white-space: pre-wrap;" class="p-2">{{post.text}} </p>
   </div>
+  <hr>
   <div class="panel-google-plus-textarea">
     <label for="text" class="pl-1">comment</label>
     <form action="{% url 'comment:add_comment' post.pk %}" method="POST">{% csrf_token %}
@@ -209,7 +210,7 @@
       }).then(function (response) {
         like_avatar.style.color = 'black';
         like_avatar.nextSibling.textContent = parseInt(like_avatar.nextSibling.textContent) - 1;
-        like_avatar.firstChild.className = "fa fa-heart-o fa-2x";
+        like_avatar.firstChild.className = "far fa-heart fa-2x";
         return response.json();
       })
     } else {
@@ -223,7 +224,7 @@
       }).then(function (response) {
         like_avatar.style.color = 'red';
         like_avatar.nextSibling.textContent = parseInt(like_avatar.nextSibling.textContent) + 1;
-        like_avatar.firstChild.className = "fa fa-heart fa-2x";
+        like_avatar.firstChild.className = "fas fa-heart fa-2x";
         return response.json();
       })
     }
@@ -232,12 +233,12 @@
   save_avatar.addEventListener("click", e => {
     e.preventDefault();
     let url_mask;
-    if (save_avatar.firstChild.classList.contains("fa-bookmark-o")) {
+    if (save_avatar.firstChild.classList.contains("far")) {
       url_mask = "{% url 'post:save_post' request.user.username post.pk %}";
-      save_avatar.firstChild.className = 'fa fa-bookmark fa-2x';
+      save_avatar.firstChild.className = 'fas fa-bookmark fa-2x';
     } else {
       url_mask = "{% url 'post:unsave_post' request.user.username post.pk %}";
-      save_avatar.firstChild.className = 'fa fa-bookmark-o fa-2x';
+      save_avatar.firstChild.className = 'far fa-bookmark fa-2x';
     }
     fetch(url_mask, {
       method: "Post",

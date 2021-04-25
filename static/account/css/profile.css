@@ -1,0 +1,15 @@
+.rounded.shadow-sm.bg-light {
+  white-space: pre-wrap;
+  direction: rtl;
+}
+
+.profile-body {
+  width: 65%;
+}
+
+
+@media (max-width: 1200px) {
+  .profile-body {
+    width: 70% !important;
+  }
+}

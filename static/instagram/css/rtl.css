@@ -1,3 +1,28 @@
+@media (max-width: 1150px) {
+
+  .container,
+  .container-md,
+  .container-sm {
+    max-width: 100%;
+  }
+
+  .suggestions {
+    display: none;
+  }
+
+  .posts {
+    width: 100% !important;
+  }
+}
+
+.container {
+  min-height: 100vh;
+  border-right: double;
+  border-left: double;
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
 .p-2.home-post img {
   border: double;
 }
@@ -23,15 +48,14 @@
 .like-comment {
   position: absolute;
   bottom: 0;
+  width: 90%;
 }
 
 .suggestions {
-  float: right;
-  border-top: ridge;
-  border-bottom: ridge;
-  border-left: ridge;
   padding: 10px;
-  margin-top: 86px;
+  margin-top: 23px;
+  text-align: center;
+  padding-right: 0;
 }
 
 nav.navbar.navbar-expand-lg.navbar-light {
@@ -42,6 +66,15 @@ nav.navbar.navbar-expand-lg.navbar-light {
   border-top: 0;
   border-style: inset;
   box-shadow: 2px -7px 20px 0px black;
-  padding: 15px;
-    margin-bottom: 15px;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.story_list {
+  min-height: 113px;
+}
+
+
+ul.navbar-nav.flex-row.align-items-center img {
+  border: solid white;
 }

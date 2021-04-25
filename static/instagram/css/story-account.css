@@ -30,7 +30,7 @@
   width: 15px;
   border: 3px solid white;
   border-radius: 50%;
-  right: 23px;
+  right: 6px;
 }
 
 .story-image {
@@ -41,7 +41,7 @@
   display: inline-flex;
 }
 
-.image_inner_container a {
+.story-user {
   font-size: 13px;
   color: black;
   text-decoration: none;

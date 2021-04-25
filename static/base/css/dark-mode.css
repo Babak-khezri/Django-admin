@@ -1,4 +1,4 @@
-.container-fluid {
+body {
     background: #5a5a5a;
 }
 
@@ -69,4 +69,8 @@ ul.dropdown-menu {
 
 .file-upload {
     background-color: #000000 !important;
+}
+
+hr {
+    border-color: wheat;
 }
