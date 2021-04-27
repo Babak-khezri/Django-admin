@@ -73,7 +73,8 @@
                 <div class="like-comment" id="{{post.pk}}">
                   <hr class="m-0">
                   <p class="mb-1"><small style="font-size: 10px;font-family: initial;">liked by
-                      <strong>{{post.likes.count}} people
+                      <strong>
+                        <span id="likes_count">{{post.likes.count}}</span> people
                         {% for liked_user in post.likes.all %}
                         {% if liked_user in request.user.following.all %}
                         </a><small> & </small>
@@ -139,7 +140,7 @@
         }).then(function (response) {
           let heart = e.target.parentElement;
           heart.style.color = 'black';
-          heart.nextSibling.textContent = parseInt(heart.nextSibling.textContent) - 1;
+          document.querySelector('#likes_count').textContent = parseInt(document.querySelector('#likes_count').textContent) - 1;
           heart.firstChild.className = "far fa-heart fa-2x";
           return response.json();
         })
@@ -154,7 +155,7 @@
         }).then(function (response) {
           let heart = e.target.parentElement;
           heart.style.color = 'red';
-          heart.nextSibling.textContent = parseInt(heart.nextSibling.textContent) + 1;
+          document.querySelector('#likes_count').textContent = parseInt(document.querySelector('#likes_count').textContent) + 1;
           heart.firstChild.className = "fas fa-heart fa-2x";
           return response.json();
         })

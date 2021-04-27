@@ -89,7 +89,7 @@
           <input class="form-control" type="text" name="text" rows="5" placeholder="What are you thinking?">
         </div>
         <div class="col-6 col-md-4">
-          <button class="btn btn-sm btn-primary" type="submit"><i class="fa fa-pencil fa-fw"></i>Share</button>
+          <button class="btn btn-sm btn-primary" type="submit"><i class="fas fa-pencil-alt	"></i>Share</button>
         </div>
       </div>
     </form>
@@ -122,7 +122,7 @@
                 <a class="btn btn-sm text-danger disable"><i class="fa fa-thumbs-down"></i></a>
                 {% else %}
                 <a class="btn btn-sm btn-default" href="{% url 'comment:dislike_comment' comment.pk %}">
-                  <i class="fa fa-thumbs-down"></i></a>
+                  <i class="fas fa-thumbs-down"></i></a>
                 {% endif %}
                 <small>{{comment.dislikes.count}}</small>
               </div>
@@ -131,7 +131,7 @@
               <div class="d-flex w-50">
                 <input class="form-control" name="text" id="replay_input" required type="text" placeholder="....">
                 <button class="btn btn-sm btn-primary" type="submit">
-                  <i class="fa fa-pencil fa-fw"></i>replay</button>
+                  <i class="fas fa-pencil-alt	"></i>replay</button>
               </div>
             </form>
             {% if comment.replays.count != 0 %}

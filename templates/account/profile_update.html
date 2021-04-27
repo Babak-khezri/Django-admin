@@ -70,17 +70,13 @@
           {{form.birth|attr:"type:date"}}
         </div>
       </div>
-      <div class="form-check form-switch form-group">
-        <label class="form-check-label " for="flexSwitchCheckDefault">private : <br></label>
-        <div class="col-lg-8 px-5">
-          {{form.is_private|add_class:"form-check-input"}}
-        </div>
+      <div class="form-check form-group d-flex ml-3">
+        <label class="form-check-label " for="flexSwitchCheckDefault">private<br></label>
+        {{form.is_private|add_class:"form-check-input"}}
       </div>
-      <div class="form-check form-switch form-group">
-        <label class="form-check-label " for="flexSwitchCheckDefault">dark mode : <br></label>
-        <div class="col-lg-8 px-5">
-          {{form.dark_mode|add_class:"form-check-input"}}
-        </div>
+      <div class="form-check form-group d-flex ml-3">
+        <label class="form-check-label " for="flexSwitchCheckDefault">dark mode<br></label>
+        {{form.dark_mode|add_class:"form-check-input"}}
       </div>
       <div class="form-group">
         <label class="col-md-3 control-label"></label>

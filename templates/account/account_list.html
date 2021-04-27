@@ -8,17 +8,18 @@
   <hr>
   <div class="accounts">
     {% for account in accounts %}
-    <div class="account d-flex align-items-center mb-3">
-      <div class="search-item-img mr-4">
-        <a href="{% url 'account:profile' account.username %}">
-          <img src="{{account.image.url}}" width="70" height="70">
-        </a>
+    <a href="{% url 'account:profile' account.username %}" class="text-dark">
+      <div class="account d-flex align-items-center mb-3">
+        <div class="search-item-img mr-4">
+          <img src="{{account.image.url}}" width="75px" height="75px" style="border: 3px solid #bf7878;"
+            class="rounded-circle">
+        </div>
+        <div class="search-item-meta mb-15">
+          <h5 class="search-item-caption">{{account.username}}</h5>
+          {{account.name}}
+        </div>
       </div>
-      <div class="search-item-meta mb-15">
-        <h5 class="search-item-caption">{{account.username}}</h5>
-        {{account.name}}
-      </div>
-    </div>
+    </a>
     {% endfor %}
   </div>
 </div>

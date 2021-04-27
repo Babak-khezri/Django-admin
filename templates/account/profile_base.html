@@ -16,11 +16,11 @@
                         class="btn btn-outline-dark btn-sm btn-block">Edit profile</a>
 
                     {% elif user in request.user.following.all %}
-                    <button style="background:#007bff;" class="btn p-0  btn-sm btn-block">
+                    <button style="background:#007bff;" class="btn p-0 d-flex btn-sm btn-block">
                         <a class="btn w-75 btn-primary btn-sm"
                             href="{% url 'account:unfollow_account' user.username  %}">following</a>
                         <a class="btn w-25 btn-primary btn-sm" href="{% url 'chat:direct' user.username %}"><i
-                                class="fa fa-paper-plane-o fa-1x" aria-hidden="true"></i></a>
+                                class="fas fa-paper-plane fa-1x" aria-hidden="true"></i></a>
                     </button>
                     {% elif user in request.user.requested.all %}
                     <a href="{% url 'account:cancel_request' user.username %}"
@@ -43,7 +43,7 @@
                     <ul class="list-inline mb-0">
                         <li class="list-inline-item">
                             <h5 class="font-weight-bold mb-0 d-block">{{user.posts_to_int}}</h5>
-                            <small class="text-muted"><i class="fa fa-picture-o" aria-hidden="true"></i>
+                            <small class="text-muted"><i class="fas fa-photo-video" aria-hidden="true"></i>
                                 Posts
                             </small>
                         </li>
