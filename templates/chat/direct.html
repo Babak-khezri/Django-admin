@@ -89,6 +89,11 @@
 {% endblock direct_content %}
 
 {% block javascript %}
+<script>//scroll
+  direct = document.querySelector('.msg_history')
+  direct.scrollTop = direct.scrollHeight;
+</script>
+
 <script>
   let attach_btn = document.querySelector(".attach_btn");
   let fileInput = document.querySelector("#id_file");
@@ -203,9 +208,7 @@
   }
 
 
-
-  msgInput = document.querySelector("#msg")
-  msgInput.addEventListener('keyup', function (event) {
+  document.querySelector("#msg").addEventListener('keyup', function (event) {
     event.preventDefault();
     if (event.keyCode === 13) {
       sendMessage()

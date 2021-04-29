@@ -64,7 +64,7 @@
       </small>
     </p>
     {% if request.user in post.likes.all %}
-    <a style="color:red" id="like_avatar" type="button"><i class="fas fa-heart fa-2x"></i></a>
+    <a style="color:red !important" id="like_avatar" type="button"><i class="fas fa-heart fa-2x"></i></a>
     {% else %}
     <a style="color:black" id="like_avatar" type="button"><i class="far fa-heart fa-2x"></i></a>
     {% endif %}
@@ -84,12 +84,13 @@
   <div class="panel-google-plus-textarea">
     <label for="text" class="pl-1">comment</label>
     <form action="{% url 'comment:add_comment' post.pk %}" method="POST">{% csrf_token %}
-      <div class="row w-100">
-        <div class="col-sm-6 col-md-8">
+      <div class="d-flex w-75">
+        <div class="w-75">
           <input class="form-control" type="text" name="text" rows="5" placeholder="What are you thinking?">
         </div>
-        <div class="col-6 col-md-4">
-          <button class="btn btn-sm btn-primary" type="submit"><i class="fas fa-pencil-alt	"></i>Share</button>
+        <div class="w-25">
+          <button class="btn btn-sm btn-primary h-100 w-50" type="submit"><i
+              class="fas fa-pencil-alt	"></i>Share</button>
         </div>
       </div>
     </form>
@@ -129,9 +130,13 @@
             </div>
             <form action="{% url 'comment:replay_comment' post.pk comment.pk  %}" method="POST">{% csrf_token %}
               <div class="d-flex w-50">
-                <input class="form-control" name="text" id="replay_input" required type="text" placeholder="....">
-                <button class="btn btn-sm btn-primary" type="submit">
-                  <i class="fas fa-pencil-alt	"></i>replay</button>
+                <div class="w-75">
+                  <input class="form-control" type="text" name="text" id="replay_input" placeholder="What are you thinking?">
+                </div>
+                <div class="w-25">
+                  <button class="btn btn-sm btn-primary h-100 w-100" type="submit"><i
+                      class="fas fa-pencil-alt	"></i>Share</button>
+                </div>
               </div>
             </form>
             {% if comment.replays.count != 0 %}
@@ -159,7 +164,9 @@
   replaysButton.forEach(replayBtn => {
     replayBtn.addEventListener('click', e => {
       let target = e.target.parentElement.parentElement;
+      console.log(target)
       let username = target.querySelector("#username").textContent;
+      console.log(username)
       let inputArea = target.parentElement.parentElement.querySelector("#replay_input");
       inputArea.parentElement.scrollIntoView({
         top: 0,
@@ -222,7 +229,7 @@
           "X-Requested-With": "XMLHttpRequest",
         }
       }).then(function (response) {
-        like_avatar.style.color = 'red';
+        like_avatar.setAttribute('style', 'color:red !important');
         like_avatar.nextSibling.textContent = parseInt(like_avatar.nextSibling.textContent) + 1;
         like_avatar.firstChild.className = "fas fa-heart fa-2x";
         return response.json();
