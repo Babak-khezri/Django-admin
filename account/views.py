@@ -34,7 +34,6 @@ def signup_view(request):
     users = " ".join(user_list)
     email_list = [user.email for user in User.objects.all()]
     emails = " ".join(email_list)
-    print(users)
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():

@@ -1,11 +1,16 @@
 .profile-body {
-  width: 65%;
+  width: 55%;
 }
 
 
 @media (max-width: 1200px) {
   .profile-body {
     width: 70% !important;
+  }
+}
+@media (max-width: 950px) {
+  .profile-body {
+    width: 95% !important;
   }
 }
 

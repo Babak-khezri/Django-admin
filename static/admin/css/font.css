@@ -30,5 +30,8 @@ a.section:link, a.section:visited {
   background: #ffeded;
 }
 tr:nth-child(2n+1), .row-form-errors {
-  background: #ffd9d9;
+  background: #461c47;
+}
+a {
+  color: rgb(0, 78, 0);
 }

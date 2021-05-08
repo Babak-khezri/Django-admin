@@ -25,34 +25,34 @@
 </div>
 
 <hr class="mt-0">
-<div class="content d-flex flex-row-reverse align-items-normal">
-  <div class="suggestions w-25">
+<div class="home-content d-flex flex-row-reverse">
+  <div class="suggestions">
     <h4>suggestions for you</h4>
     <hr>
     {% for account in suggestions %}
     <div class="suggest justify-content-between align-items-center p-1 d-flex">
       <img height="50px" class="rounded-circle" width="50px" src="{{account.image.url}}" alt="">
-      <small class="ml-3 flex-grow-1">
+      <small class="ml-5 flex-grow-1 text-left">
         {{account.username|truncatechars:15}}
       </small>
       <a href="{% url 'account:profile' account.username %}" class="btn btn-primary mt-2">
-        follow
+        see profile
       </a>
     </div>
     {% endfor %}
 
   </div>
-  <div class="posts w-75">
-    <div class="row">
+  <div class="posts">
+    <div class="d-flex flex-wrap">
       {% for post in posts %}
-      <div class="d-flex flex-column">
-        <div class="search-item pl-3 d-inline-flex">
+      <div class="post-body d-flex flex-column w-100">
+        <div class="search-item pl-3 py-2 d-inline-flex">
           <div class="search-item-img mr-1">
             <a href="{% url 'account:profile' post.user.username %}">
               <img src="{{post.user.image.url}}" class="rounded-circle" width="50px" height="50px">
             </a>
           </div>
-          <div class="search-item-content mt-1">
+          <div class="search-item-content ml-2">
             <h5 class="search-item-caption m-0"><a
                 href="{% url 'account:profile' post.user.username %}">{{post.user.username}}</a></h5>
             <div class="search-item-meta mb-15">
@@ -62,50 +62,55 @@
             </div>
           </div>
         </div>
-        <div class="px-2">
-          <div class="d-flex flex-row">
-            <div class="p-2 home-post">
-              {% include "post/tags/slide_show.html" %}
-            </div>
-            <div class="p-2 post-detail">
-              <div class="detail">
-                {{post.text|truncatewords:55}}
-                <div class="like-comment" id="{{post.pk}}">
-                  <hr class="m-0">
-                  <p class="mb-1"><small style="font-size: 10px;font-family: initial;">liked by
-                      <strong>
-                        <span id="likes_count{{post.pk}}">{{post.likes.count}}</span> people
-                        {% for liked_user in post.likes.all %}
-                        {% if liked_user in request.user.following.all %}
-                        </a><small> & </small>
-                        <a style="color:black" href="{% url 'account:profile' liked_user.username %}">
-                          {{liked_user.username}}
-                          {% endif %}
-                          {% endfor %}
-                      </strong></small>
-                  </p>
-                  {% if request.user in post.likes.all %}
-                  <a style="color:red !important" id="like_avatar" type="button"><i class="fas fa-heart fa-2x"></i></a>
-                  {% else %}
-                  <a style="color:black" id="like_avatar" type="button"><i class="far fa-heart fa-2x"></i></a>
-                  {% endif %}
+        <div class="d-flex flex-column w-100">
+          <div class="home-post">
+            {% include "post/tags/slide_show.html" %}
+          </div>
+          <div class="post-detail">
+            <div class="detail">
+              <div class="like-comment" id="{{post.pk}}">
+                {% if request.user in post.likes.all %}
+                <a style="color:red !important" id="like_avatar" type="button"><i class="fas fa-heart fa-2x"></i></a>
+                {% else %}
+                <a style="color:black" id="like_avatar" type="button"><i class="far fa-heart fa-2x"></i></a>
+                {% endif %}
 
-                  <a href="{% url 'post:post_detail' post.pk %}" style="color:black" class="mx-3">
-                    <i class="fas fa-comments fa-2x" aria-hidden="true"></i>
-                    {{post.comments.count}}
-                  </a>
-                  {% if request.user in post.saves.all %}
-                  <a style="color:black" id="save_avatar" type="button"><i class="fas fa-bookmark fa-2x"></i></a>
-                  {% else %}
-                  <a style="color:black" id="save_avatar" type="button"><i class="far fa-bookmark fa-2x"></i></a>
-                  {% endif %}
-                </div>
+                <a href="{% url 'post:post_detail' post.pk %}" style="color:black" class="mx-3">
+                  <i class="fas fa-comments fa-2x" aria-hidden="true"></i>
+                  {{post.comments.count}}
+                </a>
+                {% if request.user in post.saves.all %}
+                <a style="color:black" class="float-right" id="save_avatar" type="button"><i
+                    class="fas fa-bookmark fa-2x" id="avatar"></i></a>
+                {% else %}
+                <a style="color:black" class="float-right" id="save_avatar" type="button"><i
+                    class="far fa-bookmark fa-2x" id="avatar"></i></a>
+                {% endif %}
+                <p class="mb-1"><small style="font-size: 10px;font-family: initial;">liked by
+                    <strong>
+                      <span id="likes_count{{post.pk}}">{{post.likes.count}}</span> people
+                      {% for liked_user in post.likes.all %}
+                      {% if liked_user in request.user.following.all %}
+                      </a><small> & </small>
+                      <a style="color:black" href="{% url 'account:profile' liked_user.username %}">
+                        {{liked_user.username}}
+                      </a>
+                      {% endif %}
+                      {% endfor %}
+                    </strong></small>
+                </p>
+                <hr class="m-0">
               </div>
+
+              <p class="post-text">
+                {{post.text|truncatewords:100}}
+              </p>
             </div>
           </div>
         </div>
-        <hr class="w-100 mx-1">
+
       </div>
+      <hr class="w-100 mx-1">
       {% endfor %}
     </div>
   </div>
@@ -173,10 +178,10 @@
       let url_mask;
       if (e.target.classList.contains("far")) {
         url_mask = "{% url 'post:save_post' request.user.username -1 %}".replace("-1", post_pk);
-        e.target.className = 'fas fa-bookmark fa-2x';
+        e.target.parentElement.querySelector("#avatar").className = 'fas fa-bookmark fa-2x';
       } else {
         url_mask = "{% url 'post:unsave_post' request.user.username -1 %}".replace("-1", post_pk);
-        e.target.className = 'far fa-bookmark fa-2x';
+        e.target.parentElement.querySelector("#avatar").className = 'far fa-bookmark fa-2x';
       }
       fetch(url_mask, {
         method: "Post",

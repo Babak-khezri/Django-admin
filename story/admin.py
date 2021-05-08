@@ -1,10 +1,12 @@
 from django.contrib import admin
 from .models import Story, Highlight
+from django.utils import timezone
+
 # Register your models here.
 
 def make_active_story(modeladmin, request, queryset):
     queryset.update(status='a')
-    queryset.update(date="")
+    queryset.update(date=timezone.now())
     modeladmin.message_user(request, 'مقالات منتشر شدند')
 
 
