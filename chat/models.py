@@ -1,10 +1,12 @@
 from django.db import models
 from account.models import User
+
 # Create your models here.
 
 
 class FileMessage(models.Model):
     file = models.FileField(upload_to='chat/files')
+
 
 
 class Message(models.Model):

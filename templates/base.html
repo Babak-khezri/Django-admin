@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="{% static 'instagram/css/explorer.css' %}">
   <link rel="stylesheet" href="{% static 'base/css/font-awesome.min.css' %}">
   <link rel="stylesheet" href="{% static 'base/css/bootstrap.min.css' %}">
-  {% if request.user.dark_mode %}
+  {% if request.user.profile.dark_mode %}
   <link rel="stylesheet" href="{% static 'base/css/dark-mode.css' %}">
   {% endif %}
   <link rel="stylesheet" href="{% static 'instagram/css/rtl.css' %}">
@@ -42,10 +42,10 @@
         <!-- Search form -->
         <form class="input-group w-auto my-auto d-none d-sm-flex" action="{% url 'account:search_account' %}"
           method="POST">{% csrf_token %}
-          <input autocomplete="off" name="search" required class="form-control rounded" placeholder="Search" />
+          <input autocomplete="off" name="search" required class="form-control rounded pl-4" placeholder="Search" />
           <i class='fas fa-search' style="    position: relative;
-          right: 193px;
-          top: 12px;"></i>
+          right: 205px;
+          top: 11px;"></i>
           <div class="invalid-tooltip">
           </div>
         </form>
@@ -84,16 +84,16 @@
         </li>
         <li class="nav-item dropdown">
           <a class="nav-link" data-toggle="dropdown" role="button">
-            <img src="{{request.user.image.url}}" class="rounded-circle" height="38px" width="38px" />
+            <img src="{{request.user.profile.image.url}}" class="rounded-circle" height="38px" width="38px" />
           </a>
           <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" dir="rtl">
-            <li><a class="dropdown-item" href="{% url 'account:profile' request.user.username %}">profile
+            <li><a class="dropdown-item" href="{% url 'profiles:profile' request.user.username %}">profile
                 <i class='far fa-user-circle'></i></a></li>
             <li><a class="dropdown-item" href="{% url 'story:add_story' %}">add story
                 <i class='fas fa-history'></i></a></li>
-            <li><a class="dropdown-item" href="{% url 'account:saved' %}">saved
+            <li><a class="dropdown-item" href="{% url 'profiles:saved' %}">saved
                 <i class='far fa-bookmark'></i></a></i></li>
-            <li><a class="dropdown-item" href="{% url 'account:archive' %}">archived
+            <li><a class="dropdown-item" href="{% url 'profiles:archive' %}">archived
                 <i class='fas fa-archive'></i></a></li>
             <li>
               <hr class="dropdown-divider">
@@ -109,7 +109,7 @@
 
 
 
-    <div class="main-content">
+    <div class="container-fluid">
       {% block content %}
 
       {% endblock content %}

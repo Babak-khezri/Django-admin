@@ -19,7 +19,7 @@ class Story(models.Model):
     date = models.DateTimeField(default=timezone.now)
     status = models.CharField(max_length=1, default='a', choices=STATUS_CHOICES)
     hits = models.ManyToManyField(User, blank=True)
-    
+
     objects = StoryManager()
 
     class Meta:
@@ -35,7 +35,7 @@ class Story(models.Model):
 
 
 class Highlight(models.Model):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL ,null=True, related_name='highlights')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='highlights')
     name = models.CharField(max_length=50)
     image = models.ImageField(upload_to='images/highlight')
     stories = models.ManyToManyField(Story,related_name='highlights')

@@ -12,6 +12,5 @@ class SetStoryStatusMiddleware:
             if (timezone.now() - story.date).days >= 1:
                 story.status = 'd'
                 story.save()
-
         response = self.get_response(request)
         return response

@@ -4,7 +4,7 @@ from .models import Comment
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('text', 'date')
+    list_display = ('user','text', 'date','likes_count','dislikes_count')
     
 
 

@@ -1,26 +1,21 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
-from django.urls.base import reverse
-from .forms import SignUpForm
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import UpdateView
+from .forms import UserCreateForm
 from .models import User
-from post.models import Post
-from django.db.models import Q
+from profiles.models import Profile
 
 
 # Create your views here.
 
 
 def login_view(request):
+    form = AuthenticationForm(data=request.POST or None)
     if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
         if form.is_valid():
             user = form.get_user()
             login(request, user)
             return redirect('/')
-    form = AuthenticationForm()
     return render(request, 'account/login.html', {'form': form})
 
 
@@ -30,46 +25,18 @@ def logout_view(request):
 
 
 def signup_view(request):
-    user_list = [user.username for user in User.objects.all()]
-    users = " ".join(user_list)
-    email_list = [user.email for user in User.objects.all()]
-    emails = " ".join(email_list)
-    if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('/')
-    else:
-        form = SignUpForm()
-    context = {
-        'form': form,
-         'users': users,
-         'emails': emails,
-    }
-    return render(request, 'account/signup.html', context)
-
-
-def profile_view(request, username):
-
-    user = get_object_or_404(User, username=username)
-    posts = Post.objects.filter(Q(user=user) & Q(
-        is_archived=False)).order_by("-date")
-    context = {
-        'user': user,
-        'posts': posts
-    }
-    return render(request, 'account/profile.html', context)
-
-
-class ProfileUpdateView(LoginRequiredMixin, UpdateView):
-    model = User
-    fields = ['username', 'image', 'email', 'name', 'bio',
-              'is_private', 'birth', 'gender', 'dark_mode']
-    template_name = 'account/profile_update.html'
-
-    def get_success_url(self):
-        return reverse('account:profile', kwargs={'username': self.object.username})
+    form = UserCreateForm(request.POST or None)
+    if request.method == 'POST' and form.is_valid():
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password2']
+        email = form.cleaned_data['email']
+        user = User.objects.create_user(username=username, email=email, password=password)
+        profile = Profile.objects.create(user=user)
+        profile.name = form.cleaned_data['name']
+        profile.save()
+        login(request, user)
+        return redirect('/')
+    return render(request, 'account/signup.html', {'form': form})
 
 
 def search_account(request):
@@ -97,21 +64,21 @@ def request_account(request, username):
     user = get_object_or_404(User, username=username)
     user.requests.add(request.user)
     user.save()
-    return redirect('account:profile', user.username)
+    return redirect('profiles:profile', user.username)
 
 
 def accept_request(request, username):
     user = get_object_or_404(User, username=username)
     request.user.requests.remove(user)
     user.following.add(request.user)
-    return redirect('account:profile', user.username)
+    return redirect('profiles:profile', user.username)
 
 
 def cancel_request(request, username):
     user = get_object_or_404(User, username=username)
     user.requests.remove(request.user)
     user.save()
-    return redirect('account:profile', user.username)
+    return redirect('profiles:profile', user.username)
 
 
 def request_list(request):
@@ -121,30 +88,10 @@ def request_list(request):
 def follow_account(request, username):
     user = get_object_or_404(User, username=username)
     request.user.following.add(user)
-    return redirect('account:profile', user.username)
+    return redirect('profiles:profile', user.username)
 
 
 def unfollow_account(request, username):
     user = get_object_or_404(User, username=username)
     request.user.following.remove(user)
-    return redirect('account:profile', user.username)
-
-
-def saved_list_view(request):
-    user = request.user
-    posts = reversed(user.saved.all())
-    context = {
-        'user': user,
-        'posts': posts
-    }
-    return render(request, 'account/saved_list.html', context)
-
-
-def archive_list_view(request):
-    user = request.user
-    posts = reversed(Post.objects.filter(Q(user=user) & Q(is_archived=True)))
-    context = {
-        'user': user,
-        'posts': posts
-    }
-    return render(request, 'account/archive_list.html', context)
+    return redirect('profiles:profile', user.username)

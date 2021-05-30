@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="{% static 'instagram/css/story-account.css' %}">
 
 
-<div class="story-list d-flex">
+<div class="story-list col-lg-10 col-sm-12 d-flex">
   {% for account in accounts %}
   <div class="story-image" {% if request.user not in account.stories.last.hits.all %} style="order: -1;" {% endif %}>
     <div class="image_outer_container d-flex mx-2">
@@ -13,11 +13,12 @@
       <div class="image_inner_container" {% if request.user in account.stories.last.hits.all %}
         style="background: darkgray;" {% endif %}>
         <a target="_blank" href="{% url 'story:story_list' account.username %}">
-          <img src="{{account.image.url}}">
+          <img src="{{account.profile.image.url}}">
         </a>
       </div>
     </div>
-    <a href="{% url 'account:profile' account.username %}">
+
+    <a href="{% url 'profiles:profile' account.username %}">
       <p class="story-user text-center mb-1">{{account.username}}</p>
     </a>
   </div>
@@ -25,36 +26,35 @@
 </div>
 
 <hr class="mt-0">
-<div class="home-content d-flex flex-row-reverse">
-  <div class="suggestions">
+<div class="home-content row d-flex flex-row-reverse">
+  <div class="suggestions d-none d-md-block  ">
     <h4>suggestions for you</h4>
     <hr>
     {% for account in suggestions %}
-    <div class="suggest justify-content-between align-items-center p-1 d-flex">
-      <img height="50px" class="rounded-circle" width="50px" src="{{account.image.url}}" alt="">
-      <small class="ml-5 flex-grow-1 text-left">
-        {{account.username|truncatechars:15}}
-      </small>
-      <a href="{% url 'account:profile' account.username %}" class="btn btn-primary mt-2">
-        see profile
+    <div class="suggest p-1">
+      <a href="{% url 'profiles:profile' account.username %}" class="btn btn-primary py-0 w-100 d-flex align-items-center">
+        <img height="50px" class="rounded-circle" width="50px" src="{{account.profile.image.url}}" alt="">
+        <small class="ml-5 flex-grow-1 text-left">
+          {{account.username|truncatechars:15}}
+        </small>
       </a>
     </div>
     {% endfor %}
 
   </div>
-  <div class="posts">
+  <div class="posts  col-md-6">
     <div class="d-flex flex-wrap">
       {% for post in posts %}
       <div class="post-body d-flex flex-column w-100">
         <div class="search-item pl-3 py-2 d-inline-flex">
           <div class="search-item-img mr-1">
-            <a href="{% url 'account:profile' post.user.username %}">
-              <img src="{{post.user.image.url}}" class="rounded-circle" width="50px" height="50px">
+            <a href="{% url 'profiles:profile' post.user.username %}">
+              <img src="{{post.user.profile.image.url}}" class="rounded-circle" width="50px" height="50px">
             </a>
           </div>
           <div class="search-item-content ml-2">
             <h5 class="search-item-caption m-0"><a
-                href="{% url 'account:profile' post.user.username %}">{{post.user.username}}</a></h5>
+                href="{% url 'profiles:profile' post.user.username %}">{{post.user.username}}</a></h5>
             <div class="search-item-meta mb-15">
               <ul class="list-inline m-0">
                 <li class=""><small>{{post.date|date:'Y-m-d H:i'}}</small></li>

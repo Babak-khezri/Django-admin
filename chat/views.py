@@ -35,8 +35,7 @@ def send_message_view(request, username):
         import json
         sender = request.user
         getter = get_object_or_404(User, username=username)
-        message = Message.objects.create(
-            sender=sender, getter=getter, text=json.load(request)['msg'])
+        message = Message.objects.create(sender=sender, getter=getter, text=json.load(request)['msg'])
         ser_message = serializers.serialize('json', [message, ])
         return JsonResponse({'msg': ser_message}, status=200)
 

@@ -1,26 +1,13 @@
-@media (max-width: 900px) {
-
-  .suggestions {
-    display: none !important;
-  }
-
-  .posts {
-    width: 100% !important;
-  }
-}
-
 body {
-  background-color: #f1efef;
-}
-
-.posts {
-  width: 41%;
+  background-color: #e3e3e3;
 }
 
 .container-fluid {
   min-height: 100vh;
   padding-right: 10px;
   padding-left: 10px;
+  padding-top: 40px;
+  padding-bottom: 50px;
 }
 
 requires .home-post img {
@@ -49,7 +36,6 @@ requires .home-post img {
 .suggestions {
   padding: 10px;
   text-align: center;
-  width: 23%;
   padding-right: 0;
   border: groove;
   border-top-left-radius: 7px;
@@ -65,6 +51,7 @@ nav.navbar.navbar-expand-lg.navbar-light {
   position: fixed;
   right: 0;
   left: 0;
+  top: 0;
   z-index: 999;
 }
 
@@ -92,16 +79,10 @@ ul.navbar-nav.flex-row.align-items-center img {
 }
 
 span.badge.rounded-pill.badge-notification.bg-danger {
-  right: 18px;
+  right: 15px;
   position: relative;
   font-size: 9px;
 }
-
-.main-content {
-  padding-top: 80px;
-  padding-bottom: 50px;
-}
-
 .footer {
   display: flex;
   justify-content: center;

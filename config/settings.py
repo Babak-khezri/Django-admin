@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'chat.apps.ChatConfig',
     'story.apps.StoryConfig',
     'comment.apps.CommentConfig',
+    'profiles.apps.ProfilesConfig',
     'widget_tweaks',
 ]
 

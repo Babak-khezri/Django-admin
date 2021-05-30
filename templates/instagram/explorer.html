@@ -9,7 +9,7 @@
   <div class="invalid-tooltip">
   </div>
 </form>
-<div class="gallery p-5">
+<div class="gallery">
   {% for post in posts %}
   <figure class="gallery__item gallery__item--{%reminder forloop.counter%}" id={{forloop.counter}}>
     <a href="{% url 'post:post_detail' post.pk %}">
@@ -21,13 +21,3 @@
 </div>
 
 {% endblock content %}
-
-{% block javascript %}
-<script>
-  let posts = document.querySelectorAll(".gallery__item");
-  posts.forEach(element => {
-    if (element.id == 0) {}
-  })
-</script>
-
-{% endblock javascript %}

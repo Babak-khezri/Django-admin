@@ -5,13 +5,13 @@ from post.models import Post
 
 
 class Comment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
-    parent = models.ForeignKey('self',default=None, null=True, blank = True, on_delete=models.CASCADE, related_name='replays')
-    text = models.TextField()
-    likes = models.ManyToManyField('account.User', blank=True, related_name='liked_comment')
+    user     = models.ForeignKey(User, on_delete=models.CASCADE)
+    post     = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    parent   = models.ForeignKey('self',default=None, null=True, blank = True, on_delete=models.CASCADE, related_name='replays')
+    text     = models.TextField()
+    likes    = models.ManyToManyField('account.User', blank=True, related_name='liked_comment')
     dislikes = models.ManyToManyField('account.User', blank=True, related_name='disliked_comment')
-    date = models.DateTimeField(auto_now_add=True)
+    date     = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = 'نظر'
@@ -20,3 +20,9 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.text[0:10]
+     
+    def likes_count(self):
+        return self.likes.count()
+
+    def dislikes_count(self):
+        return self.dislikes.count()

@@ -4,9 +4,8 @@ from .models import User
 
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('username', 'image_tag', 'name', 'email', 'is_private')
-    search_fields = ('username', 'email', 'name')
-    list_filter = (['is_private', 'gender'])
+    list_display = ('username', 'email')
+    search_fields = ('username', 'email')
     ordering = ('username',)
 
 

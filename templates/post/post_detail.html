@@ -12,85 +12,95 @@
 
 
 {% if not post.is_archived or post.user == request.user%}
-
-<div class="panel-heading">
-  <div class="account-post w-75">
-    <div class="post-navbar d-flex">
-      <div class="account-detail d-flex" style="align-items: inherit;">
-        <a href="{% url 'account:profile' post.user.username %}">
-          <img src="{{post.user.image.url}}" width="70" height="70" class="rounded-circle mr-2">
-        </a>
-        <div class="search-item-content">
-          <h5 class="m-0"><a>{{post.user.username}}</a></h5>
-          <p class="m-0"><small>{{post.date|date:'Y-m-d H:i'}}</small></p>
-        </div>
-      </div>
-      {% if post.user == request.user %}
-      <div class="nav-item dropdown">
-        <p class="nav-link p-0 m-0" role="button" data-bs-toggle="dropdown">
-          <strong>...</strong>
-        </p>
-        <ul class="dropdown-menu mw-0" data-toggle="dropdown" aria-labelledby="navbarDropdown">
-          {% if post.is_archived %}
-          <li><a class="dropdown-item w-100" href="{% url 'post:show_on_profile' post.pk %}">Show On Profile</a></li>
-          {% else %}
-          <li><a class="dropdown-item w-100" href="{% url 'post:archive_post' post.pk %}">Archive</a></li>
-          {% endif %}
-          <hr class="dropdown-divider">
-          <li><a class="dropdown-item" href="{% url 'post:delete_post' post.pk %}">Remove</a></li>
+<div class="post-body m-auto d-flex flex-column" style="width:40%;">
+  <div class="search-item pl-3 py-2 d-inline-flex">
+    <div class="search-item-img mr-1">
+      <a href="{% url 'profiles:profile' post.user.username %}">
+        <img src="{{post.user.image.url}}" class="rounded-circle" width="50px" height="50px">
+      </a>
+    </div>
+    <div class="search-item-content ml-2">
+      <h5 class="search-item-caption m-0"><a
+          href="{% url 'profiles:profile' post.user.username %}">{{post.user.username}}</a></h5>
+      <div class="search-item-meta mb-15">
+        <ul class="list-inline m-0">
+          <li class=""><small>{{post.date|date:'Y-m-d H:i'}}</small></li>
         </ul>
       </div>
-      {% endif %}
     </div>
-    <div class="home-post pl-0 pt-1 pb-0">
-
+    {% if post.user == request.user %}
+    <div class="nav-item dropdown">
+      <p class="nav-link p-0 m-0" role="button" data-toggle="dropdown">
+        <strong>...</strong>
+      </p>
+      <ul class="dropdown-menu mw-0" data-toggle="dropdown" aria-labelledby="navbarDropdown">
+        {% if post.is_archived %}
+        <li><a class="dropdown-item w-100" href="{% url 'post:show_on_profile' post.pk %}">Show On Profile</a></li>
+        {% else %}
+        <li><a class="dropdown-item w-100" href="{% url 'post:archive_post' post.pk %}">Archive</a></li>
+        {% endif %}
+        <hr class="dropdown-divider">
+        <li><a class="dropdown-item" href="{% url 'post:delete_post' post.pk %}">Remove</a></li>
+      </ul>
+    </div>
+    {% endif %}
+  </div>
+  <div class="d-flex flex-column w-100">
+    <div class="home-post">
       {% include "post/tags/slide_show.html" %}
+    </div>
+    <div class="post-detail">
+      <div class="detail">
+        <div class="like-comment" id="{{post.pk}}">
+          {% if request.user in post.likes.all %}
+          <a style="color:red !important" id="like_avatar" type="button"><i class="fas fa-heart fa-2x"></i></a>
+          {% else %}
+          <a style="color:black" id="like_avatar" type="button"><i class="far fa-heart fa-2x"></i></a>
+          {% endif %}
 
+          <a href="{% url 'post:post_detail' post.pk %}" style="color:black" class="mx-3">
+            <i class="fas fa-comments fa-2x" aria-hidden="true"></i>
+            {{post.comments.count}}
+          </a>
+          {% if request.user in post.saves.all %}
+          <a style="color:black" class="float-right" id="save_avatar" type="button"><i class="fas fa-bookmark fa-2x"
+              id="avatar"></i></a>
+          {% else %}
+          <a style="color:black" class="float-right" id="save_avatar" type="button"><i class="far fa-bookmark fa-2x"
+              id="avatar"></i></a>
+          {% endif %}
+          <p class="mb-1"><small style="font-size: 10px;font-family: initial;">liked by
+              <strong>
+                <span id="likes_count{{post.pk}}">{{post.likes.count}}</span> people
+                {% for liked_user in post.likes.all %}
+                {% if liked_user in request.user.following.all %}
+                </a><small> & </small>
+                <a style="color:black" href="{% url 'profiles:profile' liked_user.username %}">
+                  {{liked_user.username}}
+                </a>
+                {% endif %}
+                {% endfor %}
+              </strong></small>
+          </p>
+          <hr class="m-0">
+        </div>
+
+        <p class="post-text">
+          {{post.text|truncatewords:100}}
+        </p>
+      </div>
     </div>
   </div>
-  <div class="panel-footer pl-2">
-    <p>
-      <small style="font-size: 10px;font-family: initial;">liked by
-        <strong>
-          {% for liked_user in post.likes.all %}
-          {% if liked_user in request.user.following.all %}
-          <a style="color:black" href="{% url 'account:profile' liked_user.username %}">
-            {{liked_user.username}}
-          </a>
-          <small> & </small>
-          {% endif %}
-          {% endfor %}
-        </strong>
-      </small>
-    </p>
-    {% if request.user in post.likes.all %}
-    <a style="color:red !important" id="like_avatar" type="button"><i class="fas fa-heart fa-2x"></i></a>
-    {% else %}
-    <a style="color:black" id="like_avatar" type="button"><i class="far fa-heart fa-2x"></i></a>
-    {% endif %}
-    {{post.likes.count}}
-    <a href="{% url 'post:post_detail' post.pk %}" style="color:black">
-      <i class="fas fa-comments fa-2x" aria-hidden="true"></i>
-    </a>
-    {{post.comments.count}}
-    {% if request.user in post.saves.all %}
-    <a style="color:black" id="save_avatar" type="button"><i class="fas fa fa-bookmark fa-2x"></i></a>
-    {% else %}
-    <a style="color:black" id="save_avatar" type="button"><i class="far fa fa-bookmark fa-2x"></i></a>
-    {% endif %}
-    <p style="    white-space: pre-wrap;" class="p-2">{{post.text}} </p>
-  </div>
-  <hr>
+
   <div class="panel-google-plus-textarea">
-    <label for="text" class="pl-1">comment</label>
+    <label for="text" class="pl-1">comments</label>
     <form action="{% url 'comment:add_comment' post.pk %}" method="POST">{% csrf_token %}
       <div class="d-flex w-75">
         <div class="w-75">
-          <input class="form-control" type="text" name="text" rows="5" placeholder="What are you thinking?">
+          <input class="form-control" type="text" name="text" rows="5" placeholder="Add comment...">
         </div>
         <div class="w-25">
-          <button class="btn btn-sm btn-primary h-100 w-50" type="submit"><i
-              class="fas fa-pencil-alt	"></i>Share</button>
+          <button class="btn btn-sm btn-primary h-100 w-50" type="submit">Post</button>
         </div>
       </div>
     </form>
@@ -106,7 +116,7 @@
               src="{{comment.user.image.url}}"></a>
           <div class="media-body">
             <div class="mar-btm">
-              <a href="{% url 'account:profile' comment.user.username %}">{{comment.user.username}}</a>
+              <a href="{% url 'profiles:profile' comment.user.username %}">{{comment.user.username}}</a>
               <p class="text-muted text-sm">{{comment.date|naturaltime}}</p>
             </div>
             <div class="text-like d-flex justify-content-between w-50">
@@ -131,11 +141,11 @@
             <form action="{% url 'comment:replay_comment' post.pk comment.pk  %}" method="POST">{% csrf_token %}
               <div class="d-flex w-50">
                 <div class="w-75">
-                  <input class="form-control" type="text" name="text" id="replay_input" placeholder="What are you thinking?">
+                  <input class="form-control" type="text" name="text" id="replay_input"
+                    placeholder="Add comment...">
                 </div>
                 <div class="w-25">
-                  <button class="btn btn-sm btn-primary h-100 w-100" type="submit"><i
-                      class="fas fa-pencil-alt	"></i>Share</button>
+                  <button class="btn btn-sm btn-primary h-100 w-100" type="submit">Post</button>
                 </div>
               </div>
             </form>
@@ -158,6 +168,8 @@
     </div>
   </div>
 </div>
+<hr class="w-100 mx-1">
+
 {% block javascript %}
 <script>
   let replaysButton = document.querySelectorAll('#replay_btn');

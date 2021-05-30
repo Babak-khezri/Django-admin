@@ -1,6 +1,7 @@
-.container {
-  max-width: 1170px;
-  margin: auto;
+@media (max-width: 1200px) {
+  .inbox_msg {
+    margin: 0 !important;
+  }
 }
 
 img {
@@ -19,6 +20,8 @@ img {
   border: 1px solid #c4c4c4;
   clear: both;
   overflow: hidden;
+  margin-left: 13%;
+  margin-right: 13%;
 }
 
 .top_spac {
@@ -153,6 +156,7 @@ img {
   float: left;
   padding: 0px 5px 0 5px;
   width: 60%;
+  background: #ffffff;
 }
 
 .sent_msg p {
