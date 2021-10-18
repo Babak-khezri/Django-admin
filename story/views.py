@@ -46,7 +46,7 @@ def highlite_create_view(request):
             for story in stories:
                 highlight.stories.add(story)
             highlight.save()
-            return redirect('account:profile', request.user.username)
+            return redirect('profiles:profile', request.user.username)
     stories = get_list_or_404(Story, user=request.user)
     return render(request, 'story/highlight_create.html', {'stories': stories})
 

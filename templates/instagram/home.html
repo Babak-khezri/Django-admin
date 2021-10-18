@@ -5,113 +5,116 @@
 <link rel="stylesheet" href="{% static 'instagram/css/story-account.css' %}">
 
 
-<div class="story-list col-lg-10 col-sm-12 d-flex">
-  {% for account in accounts %}
-  <div class="story-image" {% if request.user not in account.stories.last.hits.all %} style="order: -1;" {% endif %}>
-    <div class="image_outer_container d-flex mx-2">
-      <div class="green_icon"></div>
-      <div class="image_inner_container" {% if request.user in account.stories.last.hits.all %}
-        style="background: darkgray;" {% endif %}>
-        <a target="_blank" href="{% url 'story:story_list' account.username %}">
-          <img src="{{account.profile.image.url}}">
-        </a>
-      </div>
-    </div>
-
-    <a href="{% url 'profiles:profile' account.username %}">
-      <p class="story-user text-center mb-1">{{account.username}}</p>
-    </a>
-  </div>
-  {% endfor %}
-</div>
-
-<hr class="mt-0">
-<div class="home-content row d-flex flex-row-reverse">
+<div class="home-page pt-2">
   <div class="suggestions d-none d-md-block  ">
     <h4>suggestions for you</h4>
     <hr>
     {% for account in suggestions %}
     <div class="suggest p-1">
-      <a href="{% url 'profiles:profile' account.username %}" class="btn btn-primary py-0 w-100 d-flex align-items-center">
+      <a href="{% url 'profiles:profile' account.username %}"
+        class="btn btn-primary py-0 w-100 d-flex align-items-center">
         <img height="50px" class="rounded-circle" width="50px" src="{{account.profile.image.url}}" alt="">
-        <small class="ml-5 flex-grow-1 text-left">
+        <span class="ml-5 flex-grow-1 text-left">
           {{account.username|truncatechars:15}}
-        </small>
+        </span>
       </a>
     </div>
     {% endfor %}
 
   </div>
-  <div class="posts  col-md-6">
-    <div class="d-flex flex-wrap">
-      {% for post in posts %}
-      <div class="post-body d-flex flex-column w-100">
-        <div class="search-item pl-3 py-2 d-inline-flex">
-          <div class="search-item-img mr-1">
-            <a href="{% url 'profiles:profile' post.user.username %}">
-              <img src="{{post.user.profile.image.url}}" class="rounded-circle" width="50px" height="50px">
+  <div class="home-content d-flex flex-column w-50">
+    <div class="story-list d-flex">
+      {% for account in accounts %}
+      <div class="story-image" {% if request.user not in account.stories.last.hits.all %} style="order: -1;"
+        {% endif %}>
+        <div class="image_outer_container d-flex mx-2">
+          <div class="green_icon"></div>
+          <div class="image_inner_container" {% if request.user in account.stories.last.hits.all %}
+            style="background: darkgray;" {% endif %}>
+            <a target="_blank" href="{% url 'story:story_list' account.username %}">
+              <img src="{{account.profile.image.url}}">
             </a>
           </div>
-          <div class="search-item-content ml-2">
-            <h5 class="search-item-caption m-0"><a
-                href="{% url 'profiles:profile' post.user.username %}">{{post.user.username}}</a></h5>
-            <div class="search-item-meta mb-15">
-              <ul class="list-inline m-0">
-                <li class=""><small>{{post.date|date:'Y-m-d H:i'}}</small></li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div class="d-flex flex-column w-100">
-          <div class="home-post">
-            {% include "post/tags/slide_show.html" %}
-          </div>
-          <div class="post-detail">
-            <div class="detail">
-              <div class="like-comment" id="{{post.pk}}">
-                {% if request.user in post.likes.all %}
-                <a style="color:red !important" id="like_avatar" type="button"><i class="fas fa-heart fa-2x"></i></a>
-                {% else %}
-                <a style="color:black" id="like_avatar" type="button"><i class="far fa-heart fa-2x"></i></a>
-                {% endif %}
-
-                <a href="{% url 'post:post_detail' post.pk %}" style="color:black" class="mx-3">
-                  <i class="fas fa-comments fa-2x" aria-hidden="true"></i>
-                  {{post.comments.count}}
-                </a>
-                {% if request.user in post.saves.all %}
-                <a style="color:black" class="float-right" id="save_avatar" type="button"><i
-                    class="fas fa-bookmark fa-2x" id="avatar"></i></a>
-                {% else %}
-                <a style="color:black" class="float-right" id="save_avatar" type="button"><i
-                    class="far fa-bookmark fa-2x" id="avatar"></i></a>
-                {% endif %}
-                <p class="mb-1"><small style="font-size: 10px;font-family: initial;">liked by
-                    <strong>
-                      <span id="likes_count{{post.pk}}">{{post.likes.count}}</span> people
-                      {% for liked_user in post.likes.all %}
-                      {% if liked_user in request.user.following.all %}
-                      </a><small> & </small>
-                      <a style="color:black" href="{% url 'account:profile' liked_user.username %}">
-                        {{liked_user.username}}
-                      </a>
-                      {% endif %}
-                      {% endfor %}
-                    </strong></small>
-                </p>
-                <hr class="m-0">
-              </div>
-
-              <p class="post-text">
-                {{post.text|truncatewords:100}}
-              </p>
-            </div>
-          </div>
         </div>
 
+        <a href="{% url 'profiles:profile' account.username %}">
+          <p class="story-user text-center mb-1">{{account.username}}</p>
+        </a>
       </div>
-      <hr class="w-100 mx-1">
       {% endfor %}
+    </div>
+    <hr class="mt-0">
+    <div class="posts">
+      <div class="d-flex flex-wrap">
+        {% for post in posts %}
+        <div class="post-body d-flex flex-column w-100">
+          <div class="search-item pl-3 py-2 d-inline-flex">
+            <div class="search-item-img mr-1">
+              <a href="{% url 'profiles:profile' post.user.username %}">
+                <img src="{{post.user.profile.image.url}}" class="rounded-circle" width="50px" height="50px">
+              </a>
+            </div>
+            <div class="search-item-content ml-2">
+              <h5 class="search-item-caption m-0"><a
+                  href="{% url 'profiles:profile' post.user.username %}">{{post.user.username}}</a></h5>
+              <div class="search-item-meta mb-15">
+                <ul class="list-inline m-0">
+                  <li class=""><small>{{post.date|date:'Y-m-d H:i'}}</small></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex flex-column w-100">
+            <div class="home-post">
+              {% include "post/tags/slide_show.html" %}
+            </div>
+            <div class="post-detail">
+              <div class="detail">
+                <div class="like-comment" id="{{post.pk}}">
+                  {% if request.user in post.likes.all %}
+                  <a style="color:red !important" id="like_avatar" type="button"><i class="fas fa-heart fa-2x"></i></a>
+                  {% else %}
+                  <a style="color:black" id="like_avatar" type="button"><i class="far fa-heart fa-2x"></i></a>
+                  {% endif %}
+
+                  <a href="{% url 'post:post_detail' post.pk %}" style="color:black" class="mx-3">
+                    <i class="fas fa-comments fa-2x" aria-hidden="true"></i>
+                    {{post.comments.count}}
+                  </a>
+                  {% if request.user in post.saves.all %}
+                  <a style="color:black" class="float-right" id="save_avatar" type="button"><i
+                      class="fas fa-bookmark fa-2x" id="avatar"></i></a>
+                  {% else %}
+                  <a style="color:black" class="float-right" id="save_avatar" type="button"><i
+                      class="far fa-bookmark fa-2x" id="avatar"></i></a>
+                  {% endif %}
+                  <p class="mb-1"><small style="font-size: 10px;font-family: initial;">liked by
+                      <strong>
+                        <span id="likes_count{{post.pk}}">{{post.likes.count}}</span> people
+                        {% for liked_user in post.likes.all %}
+                        {% if liked_user in request.user.following.all %}
+                        </a><small> & </small>
+                        <a style="color:black" href="{% url 'account:profile' liked_user.username %}">
+                          {{liked_user.username}}
+                        </a>
+                        {% endif %}
+                        {% endfor %}
+                      </strong></small>
+                  </p>
+                  <hr class="m-0">
+                </div>
+
+                <p class="post-text">
+                  {{post.text|truncatewords:100}}
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <hr class="w-100 mx-1">
+        {% endfor %}
+      </div>
     </div>
   </div>
 </div>

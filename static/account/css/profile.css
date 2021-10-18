@@ -8,11 +8,15 @@
 }
 
 .post {
-  width: 32%;
+  width: 33%;
   margin-bottom: 5px;
 }
 
 .post-image {
   height: 20vh;
   width: 100%;
+}
+
+.highlight img {
+  border: solid 2px black;
 }

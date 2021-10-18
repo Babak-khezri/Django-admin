@@ -43,8 +43,8 @@ def search_account(request):
     keyword = request.POST.get('search')
     accounts = [account for account in User.objects.all()
                 if keyword in account.email.split('@')[0]
-                or keyword in account.name
-                or keyword in account.bio]
+                or keyword in account.profile.name
+                or keyword in account.profile.bio]
     return render(request, 'account/account_list.html', {'accounts': accounts})
 
 

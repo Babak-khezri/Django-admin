@@ -2,13 +2,6 @@
 {% load extra_filters %}
 {% block title %}explorer{% endblock title %}
 {% block content %}
-<form class="input-group w-auto d-sm-flex" action="{% url 'account:search_account' %}" method="POST">
-  {% csrf_token %}
-  <input autocomplete="off" type="search" name="search" required class="form-control rounded" placeholder="Search"
-    style="width: 150px;height: 28px;" />
-  <div class="invalid-tooltip">
-  </div>
-</form>
 <div class="gallery">
   {% for post in posts %}
   <figure class="gallery__item gallery__item--{%reminder forloop.counter%}" id={{forloop.counter}}>

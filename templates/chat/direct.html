@@ -6,7 +6,7 @@
   <div class="headind_srch">
     <div class="recent_heading">
       <div class="incoming_msg_img">
-        <img height="35px" width="35px" style="max-width:none" class="rounded-circle" src="{{user2.image.url}}"
+        <img height="35px" width="35px" style="max-width:none" class="rounded-circle" src="{{user2.profile.image.url}}"
           alt="sunil">
       </div>
     </div>
@@ -38,11 +38,11 @@
           &#x2713;
           {% endif %}
           {{message.date|date:'Y-m-d H:i'}}
-          <div class="nav-item float-right">
-            <a class="nav-link p-0 mr-1" href="#" role="button" data-bs-toggle="dropdown">
+          <div class="nav-item dropdown float-right">
+            <h6 class="nav-link p-0 mr-1" role="button" data-toggle="dropdown">
               <strong>...</strong>
-            </a>
-            <ul class="dropdown-menu mw-0 p-0" aria-labelledby="navbarDropdown">
+            </h6>
+            <ul class="dropdown-menu mw-0 p-0" data-toggle="dropdown" aria-labelledby="navbarDropdown">
               <li><a class="dropdown-item" href="{% url 'chat:delete_message' message.pk %}"><small>delete</small> </a>
               </li>
               <!-- <li><a class="dropdown-item" href="">Remove</a></li> -->

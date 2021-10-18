@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'story.apps.StoryConfig',
     'comment.apps.CommentConfig',
     'profiles.apps.ProfilesConfig',
+    'api.apps.ApiConfig',
     'widget_tweaks',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -126,3 +128,14 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # where read statics
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static') where static files upload
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+# drf
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly'
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+}

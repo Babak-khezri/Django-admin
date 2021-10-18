@@ -8,7 +8,7 @@
     <div class="chat_people">
       <a href="{% url 'chat:direct' account.username %}">
         <div class="chat_img">
-          <img height="45px" class="rounded-circle z-depth-2" src="{{account.image.url}}" alt="sunil"> </div>
+          <img height="45px" width="45px" class="rounded-circle z-depth-2" src="{{account.profile.image.url}}" alt="sunil"> </div>
         <div class="chat_ib">
           <h5>{{account.username}} <span class="chat_date">{{message.date|date:'Y-m-d H:i'}}</span></h5>
           {% if message.seen or message.sender == user %}

@@ -27,15 +27,10 @@
   <div class="container-fluid">
     {% if request.user.is_authenticated %}
     <nav class="navbar navbar-expand-lg navbar-light justify-content-around px-0">
-      <!-- Left elements -->
-      <div class="d-flex">
         <!-- Brand -->
         <a class="navbar-brand m-0 d-flex align-items-center" href="/">
-          <img src="{% static 'base/img/logo.png' %}" height="40px" width="105px" style="margin-top: 2px;" />
+          <img src="{% static 'base/img/logo.png' %}" height="40px" width="105px" />
         </a>
-
-      </div>
-      <!-- Left elements -->
 
       <!-- Center elements -->
       <ul class="navbar-nav flex-row">
@@ -43,9 +38,6 @@
         <form class="input-group w-auto my-auto d-none d-sm-flex" action="{% url 'account:search_account' %}"
           method="POST">{% csrf_token %}
           <input autocomplete="off" name="search" required class="form-control rounded pl-4" placeholder="Search" />
-          <i class='fas fa-search' style="    position: relative;
-          right: 205px;
-          top: 11px;"></i>
           <div class="invalid-tooltip">
           </div>
         </form>
@@ -107,13 +99,9 @@
     </nav>
     {% endif %}
 
-
-
-    <div class="container-fluid">
       {% block content %}
 
       {% endblock content %}
-    </div>
   </div>
 
   {% block javascript %}

@@ -7,6 +7,7 @@ class User(AbstractUser):
     email = models.EmailField(unique=True, max_length=254)
     following = models.ManyToManyField('User', blank=True, related_name='followers')
     requests = models.ManyToManyField('User', blank=True, related_name='requested')
+    is_private = models.BooleanField(default=False)
     first_name = None
     last_name = None
 

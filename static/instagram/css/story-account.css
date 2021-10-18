@@ -35,6 +35,7 @@
 
 .story-image {
   width: 95px;
+  display: inline-block;
 }
 
 .search-item-img {

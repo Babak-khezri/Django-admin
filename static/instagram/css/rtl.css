@@ -1,12 +1,12 @@
 body {
-  background-color: #e3e3e3;
+  background-color: #fafafa;
 }
 
 .container-fluid {
-  min-height: 100vh;
+  min-height: calc(100vh - 115px);;
   padding-right: 10px;
   padding-left: 10px;
-  padding-top: 40px;
+  padding-top: 65px;
   padding-bottom: 50px;
 }
 
@@ -14,13 +14,16 @@ requires .home-post img {
   width: 100%;
 }
 
+.home-page {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-evenly;
+}
+
 .post-body {
-  border: groove;
-  border-top-left-radius: 7px;
-  border-top-right-radius: 7px;
-  border-bottom-right-radius: 7px;
-  border-bottom-left-radius: 7px;
+  border: groove 2px;
   background: white;
+
 }
 
 .home-content {
@@ -37,22 +40,20 @@ requires .home-post img {
   padding: 10px;
   text-align: center;
   padding-right: 0;
-  border: groove;
-  border-top-left-radius: 7px;
-  border-top-right-radius: 7px;
+  border: groove 2px;
   background: white;
+  width: 20%;
 }
 
 nav.navbar.navbar-expand-lg.navbar-light {
-  background: linear-gradient(45deg, #d46b6b, #acfeff);
+  background: linear-gradient(186deg, #efafaf, #c1fff9);
   border-bottom: double #9fa2e4;
-  box-shadow: 2px -7px 20px 0px black;
-  margin-bottom: 15px;
+  box-shadow: 2px -7px 10px 0px black;
   position: fixed;
   right: 0;
   left: 0;
   top: 0;
-  z-index: 999;
+  height: 65px;
 }
 
 
@@ -61,13 +62,17 @@ ul.navbar-nav.flex-row.align-items-center img {
 }
 
 .story-list.d-flex {
-  min-height: 109px;
-  border: groove;
-  border-top-left-radius: 7px;
-  border-top-right-radius: 7px;
-  border-bottom-right-radius: 7px;
-  border-bottom-left-radius: 7px;
+  min-height: 125px;
+  max-height: 125px;
+  border: groove 2px;
   background: white;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.search-item.px-3.py-2 {
+  justify-content: space-between;
+  align-items: baseline;
 }
 
 .search-item-content a {
@@ -83,6 +88,7 @@ span.badge.rounded-pill.badge-notification.bg-danger {
   position: relative;
   font-size: 9px;
 }
+
 .footer {
   display: flex;
   justify-content: center;

@@ -17,7 +17,6 @@ class Profile(models.Model):
     website    = models.URLField(blank=True)
     birth      = models.DateField(blank=True, null=True)
     gender     = models.CharField(max_length=1, choices=STATUS_CHOICES, blank=True)
-    is_private = models.BooleanField(default=False)
     dark_mode  = models.BooleanField(default=False)
 
     def __str__(self):
