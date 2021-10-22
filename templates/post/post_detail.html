@@ -12,7 +12,7 @@
 
 
 {% if not post.is_archived or post.user == request.user%}
-<div class="post-body m-auto d-flex flex-column" style="width:45%;">
+<div class="post-body mx-auto d-flex flex-column my-2" style="width:55%;">
   <div class="search-item px-3 py-2 d-inline-flex">
     <div class="user-info d-inline-flex">
       <div class="search-item-img mr-1">
@@ -73,7 +73,7 @@
           {% endif %}
           <p class="mb-1"><small style="font-size: 10px;font-family: initial;">liked by
               <strong>
-                <span id="likes_count{{post.pk}}">{{post.likes.count}}</span> people
+                <span id="likes_count">{{post.likes.count}}</span> people
                 {% for liked_user in post.likes.all %}
                 {% if liked_user in request.user.following.all %}
                 </a><small> & </small>
@@ -176,9 +176,7 @@
   replaysButton.forEach(replayBtn => {
     replayBtn.addEventListener('click', e => {
       let target = e.target.parentElement.parentElement;
-      console.log(target)
       let username = target.querySelector("#username").textContent;
-      console.log(username)
       let inputArea = target.parentElement.parentElement.querySelector("#replay_input");
       inputArea.parentElement.scrollIntoView({
         top: 0,
@@ -204,49 +202,39 @@
     })
   })
 </script>
-
+<!-- double click like post -->
 <script>
-  let posts = document.querySelectorAll(".home-post");
+  let post = document.querySelector(".home-post");
   let like_avatar = document.querySelector("#like_avatar");
   let save_avatar = document.querySelector("#save_avatar");
-  // double click like post
-  posts.forEach(post => {
-    post.addEventListener("dblclick", e => {
-      like_avatar.click();
-    })
+  let likes_count = document.querySelector("#likes_count");
+  post.addEventListener("dblclick", e => {
+    like_avatar.click();
   })
+
   // ajax like post
   like_avatar.addEventListener("click", e => {
-    e.preventDefault();
+    let url, count, color, icon;
     if (like_avatar.style.color == 'red') {
-      let url_mask = "{% url 'post:unlike_post' request.user.username post.pk %}";
-      fetch(url_mask, {
-        method: "Post",
-        headers: {
-          "x-CSRFToken": getCSRFToken(),
-          "X-Requested-With": "XMLHttpRequest",
-        }
-      }).then(function (response) {
-        like_avatar.style.color = 'black';
-        like_avatar.nextSibling.textContent = parseInt(like_avatar.nextSibling.textContent) - 1;
-        like_avatar.firstChild.className = "far fa-heart fa-2x";
-        return response.json();
-      })
+      url = "{% url 'post:unlike_post' request.user.username post.pk %}";
+      likes_count.textContent = parseInt(likes_count.textContent) - 1;
+      like_avatar.setAttribute('style', "color:black !important");
+      like_avatar.firstChild.className = "far fa-heart fa-2x";
     } else {
-      let url_mask = "{% url 'post:like_post' request.user.username post.pk %}";
-      fetch(url_mask, {
-        method: "Post",
-        headers: {
-          "x-CSRFToken": getCSRFToken(),
-          "X-Requested-With": "XMLHttpRequest",
-        }
-      }).then(function (response) {
-        like_avatar.setAttribute('style', 'color:red !important');
-        like_avatar.nextSibling.textContent = parseInt(like_avatar.nextSibling.textContent) + 1;
-        like_avatar.firstChild.className = "fas fa-heart fa-2x";
-        return response.json();
-      })
+      url = "{% url 'post:like_post' request.user.username post.pk %}";
+      likes_count.textContent = parseInt(likes_count.textContent) + 1;
+      like_avatar.setAttribute('style', "color:red !important");
+      like_avatar.firstChild.className = "fas fa-heart fa-2x";
     }
+    fetch(url, {
+      method: "Post",
+      headers: {
+        "x-CSRFToken": getCSRFToken(),
+        "X-Requested-With": "XMLHttpRequest",
+      }
+    }).then(function (response) {
+      return response.json();
+    })
   })
   // ajax save post
   save_avatar.addEventListener("click", e => {

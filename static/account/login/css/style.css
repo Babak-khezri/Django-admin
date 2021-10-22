@@ -74,7 +74,6 @@ h2 {
 
 .half .contents .form-control,
 .half .bg .form-control {
-  border: none;
   border-radius: 4px;
   height: 54px;
   background: #fbdfe3;

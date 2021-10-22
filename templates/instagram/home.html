@@ -2,43 +2,37 @@
 {% block title %}Home{% endblock title %}
 {% load static %}
 {% block content %}
-<link rel="stylesheet" href="{% static 'instagram/css/story-account.css' %}">
+
 
 
 <div class="home-page pt-2">
-  <div class="suggestions d-none d-md-block  ">
-    <h4>suggestions for you</h4>
+  <div class="suggestions shadow d-none d-md-block  ">
+    <h4>suggestions</h4>
     <hr>
     {% for account in suggestions %}
-    <div class="suggest p-1">
-      <a href="{% url 'profiles:profile' account.username %}"
-        class="btn btn-primary py-0 w-100 d-flex align-items-center">
-        <img height="50px" class="rounded-circle" width="50px" src="{{account.profile.image.url}}" alt="">
-        <span class="ml-5 flex-grow-1 text-left">
-          {{account.username|truncatechars:15}}
-        </span>
-      </a>
+    <div class="suggest d-flex  p-0 w-100 d-flex align-items-center">
+      <div style="width: 56px;height:56px;">
+        {% include 'profiles/profile_avatar.html' with account=account %}
+      </div>
+      <div class="ml-3 text-left">
+        {{account.username|truncatechars:15}}
+        <a href="{% url 'profiles:profile' account.username %}">
+          <small class="text-left d-block">
+            see profile
+          </small>
+        </a>
+      </div>
     </div>
     {% endfor %}
 
   </div>
   <div class="home-content d-flex flex-column w-50">
-    <div class="story-list d-flex">
+    <div class="story-list shadow d-flex">
       {% for account in accounts %}
-      <div class="story-image" {% if request.user not in account.stories.last.hits.all %} style="order: -1;"
-        {% endif %}>
-        <div class="image_outer_container d-flex mx-2">
-          <div class="green_icon"></div>
-          <div class="image_inner_container" {% if request.user in account.stories.last.hits.all %}
-            style="background: darkgray;" {% endif %}>
-            <a target="_blank" href="{% url 'story:story_list' account.username %}">
-              <img src="{{account.profile.image.url}}">
-            </a>
-          </div>
-        </div>
-
+      <div class="story ml-2 mt-1" style="width: 80px;height: 80px;">
+        {% include 'profiles/profile_avatar.html' with account=account %}
         <a href="{% url 'profiles:profile' account.username %}">
-          <p class="story-user text-center mb-1">{{account.username}}</p>
+          <small class="text-dark">{{account.username}}</small>
         </a>
       </div>
       {% endfor %}
@@ -47,12 +41,10 @@
     <div class="posts">
       <div class="d-flex flex-wrap">
         {% for post in posts %}
-        <div class="post-body d-flex flex-column w-100">
+        <div class="post-body shadow d-flex flex-column w-100">
           <div class="search-item pl-3 py-2 d-inline-flex">
-            <div class="search-item-img mr-1">
-              <a href="{% url 'profiles:profile' post.user.username %}">
-                <img src="{{post.user.profile.image.url}}" class="rounded-circle" width="50px" height="50px">
-              </a>
+            <div class="user-avatar" style="width: 57px; height:57px">
+              {% include "profiles/profile_avatar.html" with account=post.user %}
             </div>
             <div class="search-item-content ml-2">
               <h5 class="search-item-caption m-0"><a
@@ -94,7 +86,7 @@
                         {% for liked_user in post.likes.all %}
                         {% if liked_user in request.user.following.all %}
                         </a><small> & </small>
-                        <a style="color:black" href="{% url 'account:profile' liked_user.username %}">
+                        <a style="color:black" href="{% url 'profiles:profile' liked_user.username %}">
                           {{liked_user.username}}
                         </a>
                         {% endif %}

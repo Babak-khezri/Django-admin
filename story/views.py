@@ -28,11 +28,6 @@ def story_list_view(request, username):
     return render(request, 'story/story_list.html', {'stories': stories})
 
 
-class StoryListView(View):
-    def get(self, request):
-        pass
-
-
 def highlite_create_view(request):
     if request.method == 'POST':
         stories = [int(story) for story in request.POST.getlist('stories')]

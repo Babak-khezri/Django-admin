@@ -6,77 +6,78 @@
     <!-- Profile widget -->
     <div class="bg-white shadow rounded overflow-hidden">
         <div class="px-4 pt-2 pb-1 cover">
-            <div class="media align-items-end profile-head">
-                <div class="profile mr-4">
-                    <img src="{{user.profile.image.url}}" alt="..." width="130px" height="200px"
-                        class="rounded mb-2 img-thumbnail">
-
-                    {% if request.user == user %}
-                    <a href="{% url 'profiles:profile_update' user.pk %}"
-                        class="btn btn-outline-dark btn-sm btn-block">Edit profile</a>
-
-                    {% elif user in request.user.following.all %}
-                    <button style="background:#007bff;" class="btn p-0 d-flex btn-sm btn-block">
-                        <a class="btn w-75 btn-primary btn-sm"
-                            href="{% url 'account:unfollow_account' user.username  %}">following</a>
-                        <a class="btn w-25 btn-primary btn-sm" href="{% url 'chat:direct' user.username %}"><i
-                                class="fas fa-paper-plane fa-1x" aria-hidden="true"></i></a>
-                    </button>
-                    {% elif user in request.user.requested.all %}
-                    <a href="{% url 'account:cancel_request' user.username %}"
-                        class="btn btn-outline-dark btn-sm btn-block">requested</a>
-                    {% else %}
-                    {% if user.is_private %}
-                    <a href="{% url 'account:request_account' user.username %}"
-                        class="btn  btn-outline-primary btn-sm btn-block">follow</a>
-                    {% else %}
-                    <a href="{% url 'account:follow_account' user.username %}"
-                        class="btn  btn-outline-primary btn-sm btn-block">follow</a>
-                    {% endif %}
-                    {% endif %}
+            <div class="media align-items-start profile-head mt-4">
+                <div style="width: 200px; height:200px;" class="shadow rounded-circle">
+                    {% include "profiles/profile_avatar.html" with account=user %}
                 </div>
-                <div class="media-body mb-5">
+                <div class="media-body ml-5 mt-4">
                     <h3 class="mt-0 mb-0">{{user.username}}</h3>
-                    <p class="mb-4"> <i class="fas fa-user mr-2"></i>{{user.profile.name}}</p>
+                    <p class="mb-2"> <i class="fas fa-user mr-2"></i>{{user.profile.name}}</p>
+                    <div class="bio py-2">
+                        {{user.profile.bio|linebreaksbr }}
+                    </div>
+
                 </div>
-                <div class="bg-light p-4 d-flex justify-content-end text-center">
-                    <ul class="list-inline mb-0">
-                        <li class="list-inline-item">
-                            <h5 class="font-weight-bold mb-0 d-block">{{user.posts_to_int}}</h5>
-                            <small class="text-muted"><i class="fas fa-photo-video" aria-hidden="true"></i>
-                                Posts
-                            </small>
-                        </li>
-                        <li class="list-inline-item">
-                            <h5 class="font-weight-bold mb-0 d-block">
-                                <a style="color:black" href="{% url 'account:followers_list' user.username %}">
-                                    {{user.followers.count}}
-                                </a>
-                            </h5>
-                            <small class="text-muted"> <i class="fa fa-user" aria-hidden="true"></i>
-                                Followers
-                            </small>
-                        </li>
-                        <li class="list-inline-item">
-                            <h5 class="font-weight-bold mb-0 d-block">
-                                <a style="color:black" href="{% url 'account:following_list' user.username %}">
-                                    {{user.following.count}}
-                                </a>
-                            </h5>
-                            <small class="text-muted"> <i class="fa fa-user" aria-hidden="true"></i>
-                                Following
-                            </small>
-                        </li>
-                    </ul>
+                <div class="d-flex flex-column mt-4">
+                    <div class="follow">
+                        {% if request.user == user %}
+                        <a href="{% url 'profiles:profile_update' user.pk %}" class="btn btn-outline-dark btn-sm">Edit
+                            profile</a>
+
+                        {% elif user in request.user.following.all %}
+                        <button style="background:#007bff;" class="btn p-0 d-flex btn-sm">
+                            <a class="btn w-75 btn-primary btn-sm"
+                                href="{% url 'account:unfollow_account' user.username  %}">following</a>
+                            <a class="btn w-25 btn-primary btn-sm" href="{% url 'chat:direct' user.username %}"><i
+                                    class="fas fa-paper-plane fa-1x" aria-hidden="true"></i></a>
+                        </button>
+                        {% elif user in request.user.requested.all %}
+                        <a href="{% url 'account:cancel_request' user.username %}"
+                            class="btn btn-outline-dark btn-sm">requested</a>
+                        {% else %}
+                        {% if user.is_private %}
+                        <a href="{% url 'account:request_account' user.username %}"
+                            class="btn  btn-outline-primary btn-sm">follow</a>
+                        {% else %}
+                        <a href="{% url 'account:follow_account' user.username %}"
+                            class="btn  btn-outline-primary btn-sm">follow</a>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                    <div class="bg-light p-2 d-flex justify-content-end text-center">
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item">
+                                <h5 class="font-weight-bold mb-0 d-block">{{user.posts_to_int}}</h5>
+                                <small class="text-muted"><i class="fas fa-photo-video" aria-hidden="true"></i>
+                                    Posts
+                                </small>
+                            </li>
+                            <li class="list-inline-item">
+                                <h5 class="font-weight-bold mb-0 d-block">
+                                    <a style="color:black" href="{% url 'account:followers_list' user.username %}">
+                                        {{user.followers.count}}
+                                    </a>
+                                </h5>
+                                <small class="text-muted"> <i class="fa fa-user" aria-hidden="true"></i>
+                                    Followers
+                                </small>
+                            </li>
+                            <li class="list-inline-item">
+                                <h5 class="font-weight-bold mb-0 d-block">
+                                    <a style="color:black" href="{% url 'account:following_list' user.username %}">
+                                        {{user.following.count}}
+                                    </a>
+                                </h5>
+                                <small class="text-muted"> <i class="fa fa-user" aria-hidden="true"></i>
+                                    Following
+                                </small>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="px-4 py-1">
-            <h5 class="mb-1">BIO :</h5>
-            <div class="rounded shadow-sm bg-light py-2">
-                {{user.profile.bio|linebreaksbr }}
-            </div>
-        </div>
+
         {% block profile_content %}
 
         {% endblock profile_content %}

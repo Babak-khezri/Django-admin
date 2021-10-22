@@ -3,11 +3,10 @@ body {
 }
 
 .container-fluid {
-  min-height: calc(100vh - 115px);;
+  min-height: calc(100vh - 65px);;
   padding-right: 10px;
   padding-left: 10px;
   padding-top: 65px;
-  padding-bottom: 50px;
 }
 
 requires .home-post img {
@@ -21,7 +20,6 @@ requires .home-post img {
 }
 
 .post-body {
-  border: groove 2px;
   background: white;
 
 }
@@ -40,20 +38,19 @@ requires .home-post img {
   padding: 10px;
   text-align: center;
   padding-right: 0;
-  border: groove 2px;
   background: white;
-  width: 20%;
+  width: 18%;
 }
 
 nav.navbar.navbar-expand-lg.navbar-light {
   background: linear-gradient(186deg, #efafaf, #c1fff9);
-  border-bottom: double #9fa2e4;
-  box-shadow: 2px -7px 10px 0px black;
+  box-shadow: 2px -7px 15px 0px black;
   position: fixed;
   right: 0;
   left: 0;
   top: 0;
-  height: 65px;
+  height: 55px;
+  z-index: 9999;
 }
 
 
@@ -64,7 +61,7 @@ ul.navbar-nav.flex-row.align-items-center img {
 .story-list.d-flex {
   min-height: 125px;
   max-height: 125px;
-  border: groove 2px;
+  
   background: white;
   overflow: auto;
   white-space: nowrap;
@@ -87,12 +84,4 @@ span.badge.rounded-pill.badge-notification.bg-danger {
   right: 15px;
   position: relative;
   font-size: 9px;
-}
-
-.footer {
-  display: flex;
-  justify-content: center;
-  text-align: center;
-  background: #141315;
-  min-height: 50px;
 }

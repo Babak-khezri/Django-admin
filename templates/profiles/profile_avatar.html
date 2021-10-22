@@ -1,0 +1,20 @@
+{% if account.stories.active %}
+
+<div class="image_outer_container">
+    <div class="image_inner_container" 
+         {% if request.user not in account.stories.last.hits.all %} style="order: -1;"           {% endif %}
+         {% if request.user in account.stories.last.hits.all %} style="background: darkgray;" {% endif %}
+    >
+        <a target="_blank" href="{% url 'story:story_list' account.username %}">
+            <img src="{{account.profile.image.url}}">
+        </a>
+    </div>
+</div>
+
+{% else %}
+<div class="image_outer_container">
+    <div class="image_inner_container" style="background: rgba(235, 1, 1, 0);">
+        <img width=class="rounded-circle" src="{{account.profile.image.url}}">
+    </div>
+</div>
+{% endif %}

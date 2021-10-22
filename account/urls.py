@@ -5,9 +5,13 @@ from .views import *
 
 app_name = 'account'
 urlpatterns = [
-    path('login',login_view,name='login'),
-    path('signup',signup_view,name='signup'),
-    path('logout',logout_view,name='logout'),
+    path('login/',login_view,name='login'),
+    path('signup/',signup_view,name='signup'),
+    path('logout/',logout_view,name='logout'),
+    path('forget_password/',forget_password_view,name='forget_password'),
+    path('forget_password/verify_otp/',verify_otp_view,name='verify_otp'),
+    path('resend_code/',resend_code_view,name='resend_code'),
+    path('forget_password/reset_password',reset_password_view,name='reset_password'),
     path('search_account/',search_account,name='search_account'),
     path('followers_list/<str:username>',followers_list,name='followers_list'),
     path('following_list/<str:username>',following_list,name='following_list'),

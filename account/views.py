@@ -4,7 +4,8 @@ from django.contrib.auth.forms import AuthenticationForm
 from .forms import UserCreateForm
 from .models import User
 from profiles.models import Profile
-
+from . import otp_handler
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -37,6 +38,66 @@ def signup_view(request):
         login(request, user)
         return redirect('/')
     return render(request, 'account/signup.html', {'form': form})
+
+
+def forget_password_view(request):
+    context = {}
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        try:
+            user = User.objects.get(email=email)
+            user.otp = otp_handler.create_otp()
+            otp_handler.send_otp(user.email,user.otp)
+            user.save()
+            request.session['user_email'] = user.email
+            return redirect('account:verify_otp')
+        except:
+            error = 'User not found !!!'
+            context['error'] = error
+    return render(request, 'account/forget_password.html',context)
+
+
+def verify_otp_view(request):
+    context = {}
+    email = request.session.get('user_email')
+    user = get_object_or_404(User,email=email)
+    if request.method == 'POST':
+        otp = request.POST.get('otp')
+        if otp_handler.check_otp_expiration(user.email):
+            if(user.otp == int(otp)):
+                return redirect('account:reset_password')
+            else:
+                context['error'] = "Code is not valid !"
+        else:
+            context['error'] = "The code is expired !"   
+    return render(request, 'account/verify_otp.html',context)
+
+
+def resend_code_view(request):
+    if request.is_ajax():
+        email = request.session.get('user_email')
+        try:
+            user = get_object_or_404(User, email=email)
+            user.otp = otp_handler.create_otp()
+            user.save()
+            print(user.otp)
+            return JsonResponse({}, status=200)
+        except User.DoesNotExist:
+            return redirect('account:forget_password')
+
+
+def reset_password_view(request):
+    context = {}
+    email = request.session.get('user_email')
+    user = get_object_or_404(User,email=email)
+    if request.method == 'POST':
+        password = request.POST.get('password1')
+        user.set_password(password)
+        user.save()
+        login(request, user)
+        request.session.clear()
+        return redirect('/')
+    return render(request, 'account/reset_password.html',context)
 
 
 def search_account(request):

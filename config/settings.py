@@ -18,7 +18,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['instagram-babak-khezry.fandogh.cloud','127.0.0.1']
 
 LOGIN_URL = "account:login"
 
@@ -125,7 +125,7 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # where read statics
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static') where static files upload
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_root') #where static files upload
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 

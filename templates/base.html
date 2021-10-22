@@ -14,6 +14,8 @@
   <link rel="stylesheet" href="{% static 'instagram/css/explorer.css' %}">
   <link rel="stylesheet" href="{% static 'base/css/font-awesome.min.css' %}">
   <link rel="stylesheet" href="{% static 'base/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'instagram/css/story-account.css' %}">
+
   {% if request.user.profile.dark_mode %}
   <link rel="stylesheet" href="{% static 'base/css/dark-mode.css' %}">
   {% endif %}
@@ -27,56 +29,62 @@
   <div class="container-fluid">
     {% if request.user.is_authenticated %}
     <nav class="navbar navbar-expand-lg navbar-light justify-content-around px-0">
-        <!-- Brand -->
-        <a class="navbar-brand m-0 d-flex align-items-center" href="/">
-          <img src="{% static 'base/img/logo.png' %}" height="40px" width="105px" />
-        </a>
+      <ul class="navbar-nav flex-row align-items-center l-0">
 
-      <!-- Center elements -->
-      <ul class="navbar-nav flex-row">
-        <!-- Search form -->
-        <form class="input-group w-auto my-auto d-none d-sm-flex" action="{% url 'account:search_account' %}"
-          method="POST">{% csrf_token %}
-          <input autocomplete="off" name="search" required class="form-control rounded pl-4" placeholder="Search" />
-          <div class="invalid-tooltip">
-          </div>
-        </form>
+        <li class="nav-item mx-1">
+          <a class="nav-link" href="#">
+            <i style=" font-size: 25px;color:black;" class="far fa-square" aria-hidden="true"></i>
+            <span class="badge rounded-pill badge-notification bg-danger">{% new_message request.user.username %}</span>
+          </a>
+        </li>
+        <li class="nav-item mx-1">
+          <a class="nav-link" href="#">
+            <i style="font-size: 25px;color:black;" class="far fa-square" aria-hidden="true"></i>
+          </a>
+        </li>
+        <li class="nav-item mx-1">
+          <a class="nav-link" href="{% url 'post:new_post' %}">
+            <i style="font-size: 25px;color:black;" class="fas fa-plus-square" aria-hidden="true"></i>
+          </a>
+        </li>
+        <li class="nav-item mx-1">
+          <a class="nav-link" href="{% url 'instagram:explorer' %}">
+            <i style="font-size: 25px;color:black;" class="fas fa-search" aria-hidden="true"></i>
+          </a>
+        </li>
+
       </ul>
-      <!-- Center elements -->
+      <!-- Brand -->
+      <a class="navbar-brand m-0 d-flex align-items-center" href="/">
+        <img src="{% static 'base/img/logo.png' %}" height="40px" width="105px" />
+      </a>
 
       <!-- Right elements -->
       <ul class="navbar-nav flex-row align-items-center l-0">
-
-
         <li class="nav-item mx-1">
           <a class="nav-link" href="/">
-            <i style="font-size: 29px;color:black;" class="fas fa-home fa-2x" aria-hidden="true"></i>
+            <i style="font-size: 25px;color:black;" class="fas fa-home" aria-hidden="true"></i>
           </a>
         </li>
 
         <li class="nav-item mx-1">
           <a class="nav-link" href="{% url 'chat:direct_list' request.user.username %}">
-            <i style="font-size: 27px;color:black;" class="fas fa-paper-plane" aria-hidden="true"></i>
+            <i style="font-size: 23px;color:black;" class="fas fa-paper-plane" aria-hidden="true"></i>
             <span class="badge rounded-pill badge-notification bg-danger">{% new_message request.user.username %}</span>
-          </a>
-        </li>
-
-        <li class="nav-item mx-1">
-          <a class="nav-link" href="{% url 'instagram:explorer' %}">
-            <i style="font-size: 29px;color:black;" class="fas fa-compass fa-2x" aria-hidden="true"></i>
           </a>
         </li>
         <li class="nav-item mx-1">
           <a class="nav-link" href="{% url 'account:request_list' %}">
-            <i style="font-size: 29px;color:black;" class="fas fa-heart fa-2x" aria-hidden="true"></i>
+            <i style="font-size: 25px;color:black;" class="fas fa-heart" aria-hidden="true"></i>
             {% if request.user.requests.all.count %}
             <span class="badge rounded-pill badge-notification bg-danger">{{request.user.requests.all.count}}</span>
             {% endif %}
           </a>
         </li>
+
         <li class="nav-item dropdown">
           <a class="nav-link" data-toggle="dropdown" role="button">
-            <img src="{{request.user.profile.image.url}}" class="rounded-circle" height="38px" width="38px" />
+            <img src="{{request.user.profile.image.url}}" class="rounded-circle" height="31px" width="31px" />
           </a>
           <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown" dir="rtl">
             <li><a class="dropdown-item" href="{% url 'profiles:profile' request.user.username %}">profile
@@ -99,19 +107,14 @@
     </nav>
     {% endif %}
 
-      {% block content %}
+    {% block content %}
 
-      {% endblock content %}
+    {% endblock content %}
   </div>
 
   {% block javascript %}
 
   {% endblock javascript %}
-  <div class="footer fixed-bottom p-2">
-    <a class="btn btn-success rounded-circle" href="{% url 'post:new_post' %}">
-      <i class="fas fa-plus"> </i>
-    </a>
-  </div>
 
 </body>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

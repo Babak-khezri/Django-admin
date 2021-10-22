@@ -1,149 +1,112 @@
-{% load static %}
+{% extends "account/registration_base.html" %}
 {% load widget_tweaks %}
 
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>signup</title>
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="{% static 'account/login/css/bootstrap.min.css' %}">
-  <!-- Style -->
-  <link rel="stylesheet" href="{% static 'account/login/css/style.css' %}">
-</head>
-<body>
-
-  <div class="d-md-flex half">
-    <div class="bg" style="background-image: url('/static/account/login/images/bg_1.jpg');"></div>
-    <div class="contents">
-
-      <div class="container">
-        <div class="row align-items-center justify-content-center">
-          <div class="col-md-12">
-            <div class="form-block mx-auto">
-              <div class="text-center mb-5">
-                <h3>signup to <strong>My site :)</strong></h3>
-                <!-- <p class="mb-4">Lorem ipsum dolor sit amet elit. Sapiente sit aut eos consectetur adipisicing.</p> -->
-              </div>
-              <form action="#" method="POST">{% csrf_token %}
-                <div class="form-group first">
-                  <label for="username">Username</label>
-                  {{form.username|add_class:'form-control h-25'|attr:"id:username"}}
-                </div>
-                <div class="form-group last mb-2">
-                  <label for="password">Email</label>
-                  {{form.email|add_class:'form-control h-25 '|attr:"id:email"}}
-                </div>
-                <div class="form-group last mb-2">
-                  <label for="password">Name</label>
-                  {{form.name|add_class:'form-control h-25 '|attr:"id:name"}}
-                </div>
-                <div class="form-group last mb-2">
-                  <label for="password">Password</label>
-                  {{form.password1|add_class:'form-control h-25 '|attr:"id:password1"}}
-                </div>
-                <div class="form-group last mb-2">
-                  <label for="password">Confirm Password</label>
-                  {{form.password2|add_class:'form-control h-25 '|attr:"id:password2"}}
-                </div>
-                <div class="d-sm-flex mb-4 align-items-center">
-                  <label class="control control--checkbox mb-3 mb-sm-0"><span class="caption">Remember me</span>
-                    <input type="checkbox" checked="checked" />
-                    <div class="control__indicator"></div>
-                  </label>
-                  <span class="ml-auto"><a href="#" class="forgot-pass">Forgot Password</a></span>
-                </div>
-
-                <input type="submit" id="submit" value="Sign Up" class="btn btn-block btn-primary">
-
-              </form>
-              <div class="text-center mb-1">
-                <small>already have account? <a href="{% url 'account:login' %}"> login</a></small>
-              </div>
-            </div>
-          </div>
-        </div>
+{% block content %}
+<div class="col-md-12">
+  <div class="form-block mx-auto">
+    <div class="text-center mb-5">
+      <h3>signup to <strong>My site :)</strong></h3>
+      <!-- <p class="mb-4">Lorem ipsum dolor sit amet elit. Sapiente sit aut eos consectetur adipisicing.</p> -->
+    </div>
+    <form action="#" method="POST">{% csrf_token %}
+      <div class="form-group first">
+        <label for="username">Username</label>
+        {{form.username|add_class:'form-control h-25'|attr:"id:username"}}
       </div>
+      <div class="form-group last mb-2">
+        <label for="password">Email</label>
+        {{form.email|add_class:'form-control h-25 '|attr:"id:email"}}
+      </div>
+      <div class="form-group last mb-2">
+        <label for="password">Name</label>
+        {{form.name|add_class:'form-control h-25 '|attr:"id:name"}}
+      </div>
+      <div class="form-group last mb-2">
+        <label for="password">Password</label>
+        {{form.password1|add_class:'form-control h-25 '|attr:"id:password1"}}
+      </div>
+      <div class="form-group last mb-2">
+        <label for="password">Confirm Password</label>
+        {{form.password2|add_class:'form-control h-25 '|attr:"id:password2"}}
+      </div>
+      <input type="submit" id="submit" value="Sign Up" class="btn btn-block btn-primary">
+
+    </form>
+    <div class="text-center mb-1">
+      <small>already have account? <a href="{% url 'account:login' %}"> login</a></small>
     </div>
   </div>
+</div>
+{% endblock content %}
 
-  <script>
-    let users = "{{users}}".split(" ");
-    let emails = "{{emails}}".split(" ");
-    inputs = document.querySelectorAll(".form-control");
-    let submit_btn = document.querySelector("#submit");
-    let access = 0;
-    console.log(submit_btn)
-    submit_btn.addEventListener("submit", e => {
-      e.preventDefault();
-      if (access != 4) {
-        e.preventDefault();
+{% block javascript %}
+<script>
+  let users = "{{users}}".split(" ");
+  let emails = "{{emails}}".split(" ");
+  inputs = document.querySelectorAll(".form-control");
+  let submit_btn = document.querySelector("#submit");
+
+
+  inputs.forEach(input => {
+    input.addEventListener("keyup", e => {
+      switch (e.target.name) {
+        case 'username':
+          checkUsername(e.target);
+          break;
+        case 'email':
+          checkEmail(e.target);
+          break;
+        case 'name':
+          checkName(e.target);
+          break;
+        case 'password1':
+          checkPassword()
+          break;
+        case 'password2':
+          checkPassword()
+          break;
       }
     })
-    inputs.forEach(input => {
-      input.addEventListener("keyup", e => {
-        switch (e.target.name) {
-          case 'username':
-            checkUsername(e.target);
-            break;
-          case 'email':
-            checkEmail(e.target);
-            break;
-          case 'name':
-            checkName(e.target);
-            break;
-          case 'password1':
-            checkPassword()
-            break;
-          case 'password2':
-            checkPassword()
-            break;
-        }
-      })
-    })
+  })
 
-    function checkUsername(target) {
-      let username_regex = /([a-zA-Z._1-9]){4,24}/
-      if (users.indexOf(target.value) >= 0 || !username_regex.test(target.value)) {
-        target.style.background = '#fbdfe3'
-      } else {
-        target.style.background = '#b8fccd'
-      }
+  function checkUsername(target) {
+    let username_regex = /([a-zA-Z._1-9]){4,24}/
+    if (users.indexOf(target.value) >= 0 || !username_regex.test(target.value)) {
+      target.style.background = '#fbdfe3'
+    } else {
+      target.style.background = '#b8fccd'
+    }
+  }
+
+  function checkEmail(target) {
+    let gmail_regex = /[a-z0-9](\.?[a-z0-9]){5,}@g(oogle)?mail\.com/
+    if (emails.indexOf(target.value) >= 0 || !gmail_regex.test(target.value)) {
+      target.style.background = '#fbdfe3'
+    } else {
+      target.style.background = '#b8fccd'
+    }
+  }
+
+  function checkName(target) {
+    if (target.value == "") {
+      target.style.background = '#fbdfe3'
+    } else {
+      target.style.background = '#b8fccd'
+    }
+  }
+
+  function checkPassword() {
+    let password_regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z#@*$%&\d]{8,}$/
+    password1 = document.querySelector("#password1")
+    password2 = document.querySelector("#password2")
+    if (password1.value != password2.value || !password_regex.test(password1.value)) {
+      password1.style.background = '#fbdfe3';
+      password2.style.background = '#fbdfe3';
+    } else {
+      password1.style.background = '#b8fccd';
+      password2.style.background = '#b8fccd';
     }
 
-    function checkEmail(target) {
-      let gmail_regex = /[a-z0-9](\.?[a-z0-9]){5,}@g(oogle)?mail\.com/
-      if (emails.indexOf(target.value) >= 0 || !gmail_regex.test(target.value)) {
-        target.style.background = '#fbdfe3'
-      } else {
-        target.style.background = '#b8fccd'
-      }
-    }
-
-    function checkName(target) {
-      if (target.value == "") {
-        target.style.background = '#fbdfe3'
-      } else {
-        target.style.background = '#b8fccd'
-      }
-    }
-
-    function checkPassword() {
-      let password_regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z#@*$%&\d]{8,}$/
-      password1 = document.querySelector("#password1")
-      password2 = document.querySelector("#password2")
-      if (password1.value != password2.value || !password_regex.test(password1.value)) {
-        password1.style.background = '#fbdfe3';
-        password2.style.background = '#fbdfe3';
-      } else {
-        password1.style.background = '#b8fccd';
-        password2.style.background = '#b8fccd';
-      }
-
-    }
-  </script>
-</body>
-</html>
+  }
+</script>
+{% endblock javascript %}
